@@ -2,11 +2,11 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from pymongo import MongoClient
 # Establish connection to MongoDB
-client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient('mongodb+srv://Austin:370@cluster0.qddlbum.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 # Access or create database
-db = client['your_database_name']
+db = client['ScheulingProject']
 # Access or create collection for users/workers
-users_collection = db['users']
+users_collection = db['user']
 
 # from .models import User
 # from .serializers import UserSerializer
