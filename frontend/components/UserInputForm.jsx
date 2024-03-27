@@ -22,7 +22,7 @@ export function UserInputForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/create_user', { user_data: formData });
+      const response = await axios.post('http://localhost:8000/create_user/', { user_data: formData });
       console.log('Response from backend:', response.data);
       // Reset form data after successful submission
       setFormData({
