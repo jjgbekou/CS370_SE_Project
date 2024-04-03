@@ -1,5 +1,6 @@
 import { verifyUser } from "../data/api"
 import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 
 export function Login() {
 
@@ -7,7 +8,8 @@ export function Login() {
     const [password, setPassword] = useState(null)
     const navigate = useNavigate()
 
-    async function handleLogin() {
+    async function handleLogin(e) {
+        e.preventDefault()
         if (!email || !password) {
             alert("Both fields must be filled out")
             return
@@ -27,7 +29,9 @@ export function Login() {
 
     return (
         <>
-            Login
+            <input onChange={(e) => setEmail(e.target.value)} placeholder="Truman Email"/>
+            <input onChange={(e) => setPassword(e.target.value)} placeholder="Password"/>
+            <button onClick={(e) => handleLogin(e)}>Login</button>
         </>
     )   
 }

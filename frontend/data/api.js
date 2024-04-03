@@ -6,7 +6,12 @@ export async function getUser(userId) {
 }
 
 export async function verifyUser(userObject) {
-    
+    let data = await axios.post(`${BASE_URL}/login`, userObject)
+    if (data.success) {
+        return true
+    } else {
+        return false
+    }
 }
 
 export async function getAllUsers() {
@@ -14,7 +19,13 @@ export async function getAllUsers() {
 }
 
 export async function createUser(userObject) {
-    let data = axios.post()
+    try {
+        let data = await axios.post(`${BASE_URL}/create_user/`, {user_data: userObject})
+    } catch(error) {
+        console.log(`Error occured during creation: ${error}`)
+    }
+    
+    return data
 }
 
 export async function updateUser(userId, userObject) {
