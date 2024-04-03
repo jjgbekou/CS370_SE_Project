@@ -5,7 +5,7 @@ import { CreateUser } from "../components/CreateUser"
 export function Landing() {
     // Mode == true means login mode,
     // Mode == false means create account mode
-    const [mode, setMode] = useState(false)
+    const [mode, setMode] = useState(true)
 
     return (
         <>
