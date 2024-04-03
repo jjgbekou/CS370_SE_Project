@@ -147,10 +147,9 @@ def update_unavailability(request): #Here, if worker updated its unavailability,
     print("Updating unavailability")
     # Decode JSON data from request body
     data = json.loads(request.body.decode('utf-8'))
-    
     # Extract necessary data
-    worker_id = data.get('worker_id')
-    unavailability = data.get('unavailability')
+    worker_id = data.get('user_data', {}).get('worker_id')
+    unavailability = data.get('user_data', {}).get('unavailability')
     
     # Check if worker_id and unavailability are provided
     if worker_id and unavailability:
@@ -164,6 +163,37 @@ def update_unavailability(request): #Here, if worker updated its unavailability,
     else:
         # Return error response if worker_id or unavailability is missing
         return JsonResponse({"error": "Worker ID or unavailability data missing"}, status=400)
+
+
+def login(request):
+    # Extract email and password from request
+    data = json.loads(request.body.decode('utf-8'))
+    email = data.get('user_data', {}).get('email')
+    password = data.get('user_data', {}).get('password')
+    # Check if email and password are provided
+    if email and password:
+        # Find user by email in the database
+        user = users_collection.find_one({'email': email})
+        
+        # If user is found
+        if user:
+            # Retrieve hashed password from the database
+            hashed_password = user.get('password')
+            
+            # Check if the provided password matches the hashed password
+            if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
+                # Return success message upon successful login
+                return JsonResponse({"message": "Login successful"})
+            else:
+                # Return error response if password is incorrect
+                return JsonResponse({"error": "Incorrect password"}, status=401)
+        else:
+            # Return error response if user with given email is not found
+            return JsonResponse({"error": "User not found"}, status=404)
+    else:
+        # Return error response if email or password is missing
+        return JsonResponse({"error": "Email or password missing"}, status=400)
+
 
 
 # def random_scheduler_for_mail_clerk():
