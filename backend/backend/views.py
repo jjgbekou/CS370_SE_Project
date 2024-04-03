@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from pymongo import MongoClient
 import json
+import bcrypt
 # Establish connection to MongoDB
 client = MongoClient('mongodb+srv://Austin:370@cluster0.qddlbum.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 # Access or create database
@@ -38,7 +39,7 @@ def create_user(request):
     # Extracting data from the request (assuming it's sent as JSON)
     #user_data = request.POST.get('user_data')  # Assuming user_data is sent in the request
     user_data = json.loads(request.body.decode('utf-8'))
-    print(user_data)
+    #print(user_data)
 
     # Check if user_data is not None
     if user_data:
@@ -52,13 +53,18 @@ def create_user(request):
         job_type = user_data.get('user_data', {}).get('job_type')
         worker_id = user_data.get('user_data', {}).get('worker_id')
         hours = user_data.get('user_data', {}).get('hours')
+        email = user_data.get('user_data', {}).get('email')
+        password = user_data.get('user_data', {}).get('password')
+        encrypted_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-        print(lastname)
-        print(firstname)
-        print(worker_type)
-        print(job_type)
-        print(worker_id)
-        print(hours)
+        # print(lastname)
+        # print(firstname)
+        # print(worker_type)
+        # print(job_type)
+        # print(worker_id)
+        # print(hours)
+        # print(email)
+        # print(password)
 
         # Check if all required fields are provided
         if lastname and firstname and worker_type and job_type and worker_id and hours:
@@ -69,7 +75,9 @@ def create_user(request):
                 'worker_type': worker_type,
                 'job_type': job_type,
                 'worker_id' : worker_id,
-                'hours' : hours
+                'hours' : hours,
+                'email' : email,
+                'password' : encrypted_password
                 # Add more fields here if needed
             }
             
