@@ -26,8 +26,8 @@ export function Login() {
 
     return (
         <form onSubmit={() => handleLogin(e)} className="flex flex-col">
-            <input onChange={(e) => setEmail(e.target.value)} placeholder="Truman Email" className="m-2" required/>
-            <input onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="m-2" required/>
+            <input onChange={(e) => setEmail(e.target.value)} placeholder="Truman Email" className="m-2 p-2 rounded-md" required/>
+            <input onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="m-2 p-2 rounded-md" required/>
             <button type="submit" className="bg-purple-400">Login</button>
         </form>
     )   
