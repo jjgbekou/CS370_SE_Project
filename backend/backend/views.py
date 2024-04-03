@@ -78,7 +78,7 @@ def create_user(request):
                 'hours' : hours,
                 'email' : email,
                 'password' : encrypted_password
-                # Add more fields here if needed
+                # Add unavailability???
             }
             
             print("We made it here")
@@ -95,3 +95,21 @@ def create_user(request):
         print("second else")
         # If no user data is provided, return a bad request response
         return JsonResponse({"error": "No user data provided"}, status=400)
+    
+def random_scheduler_for_desk_assistant():
+    print("DA")
+    #To do, fetch unavailability of all workers categorized as Desk assistant
+
+
+def random_scheduler_for_mail_clerk():
+    print("MC")
+
+def update_desk_assistant_schedule():
+    print("New DA")
+
+def update_mail_clerk_schedule():
+    print("New MC")
+
+def update_unavailability():
+    print("updated")
+    #Here, if worker updated its unavailability, app must check before it generates/copy-paste new schedules (next 2 weeks)
