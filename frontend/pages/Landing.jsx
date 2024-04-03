@@ -9,7 +9,16 @@ export function Landing() {
 
     return (
         <>
-            {mode ? <Login/> : <CreateUser/>}
+            {mode ? 
+            <>
+                <Login/>
+                <span onClick={() => setMode(false)} className="cursor-pointer text-sm my-7">Create New User</span>
+            </>
+            :
+            <>
+                <CreateUser/>
+                <span onClick={() => setMode(true)} className="cursor-pointer text-sm my-7">Login Existing Account</span>
+            </>}
         </>
     )
 }

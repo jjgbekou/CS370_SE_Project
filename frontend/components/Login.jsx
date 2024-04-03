@@ -10,10 +10,7 @@ export function Login() {
 
     async function handleLogin(e) {
         e.preventDefault()
-        if (!email || !password) {
-            alert("Both fields must be filled out")
-            return
-        }
+        
         let userObject = {email: email, password: password}
 
         let loginSuccessful = await verifyUser(userObject)
@@ -28,10 +25,10 @@ export function Login() {
     }
 
     return (
-        <>
-            <input onChange={(e) => setEmail(e.target.value)} placeholder="Truman Email"/>
-            <input onChange={(e) => setPassword(e.target.value)} placeholder="Password"/>
-            <button onClick={(e) => handleLogin(e)}>Login</button>
-        </>
+        <form onSubmit={() => handleLogin(e)} className="flex flex-col">
+            <input onChange={(e) => setEmail(e.target.value)} placeholder="Truman Email" className="m-2" required/>
+            <input onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="m-2" required/>
+            <button type="submit" className="bg-purple-400">Login</button>
+        </form>
     )   
 }
