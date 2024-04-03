@@ -5,6 +5,10 @@ export async function getUser(userId) {
     let data = axios.get()
 }
 
+export async function verifyUser(userObject) {
+    
+}
+
 export async function getAllUsers() {
     let data = axios.get()
 }
