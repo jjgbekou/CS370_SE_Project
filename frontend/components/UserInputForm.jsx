@@ -8,7 +8,9 @@ export function UserInputForm() {
     worker_id: '',
     hours: '',
     job_type: '',
-    worker_type: ''
+    worker_type: '',
+    email: '',
+    password: ''
   });
 
   const handleChange = (e) => {
