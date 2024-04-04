@@ -159,7 +159,7 @@ def update_unavailability(request): #Here, if worker updated its unavailability,
         users_collection.update_one(query, new_values)
         
         # Return success response
-        return JsonResponse({"message": "Unavailability updated successfully"})
+        return JsonResponse({"message": "Unavailability updated successfully"}, status = 200)
     else:
         # Return error response if worker_id or unavailability is missing
         return JsonResponse({"error": "Worker ID or unavailability data missing"}, status=400)
@@ -183,7 +183,7 @@ def login(request):
             # Check if the provided password matches the hashed password
             if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
                 # Return success message upon successful login
-                return JsonResponse({"message": "Login successful"})
+                return JsonResponse({"message": "Login successful"}, status = 200)
             else:
                 # Return error response if password is incorrect
                 return JsonResponse({"error": "Incorrect password"}, status=401)
