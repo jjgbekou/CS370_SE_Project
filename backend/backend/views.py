@@ -232,7 +232,7 @@ def login(request):
         # If user is found
         if user:
             # Retrieve hashed password from the database
-            hashed_password = user.get('password')
+            hashed_password = user.get('user_data', {}).get('password')
             
             # Check if the provided password matches the hashed password
             if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
