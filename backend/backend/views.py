@@ -52,7 +52,7 @@ def create_user(request):
         worker_type = user_data.get('user_data', {}).get('worker_type')
         job_type = user_data.get('user_data', {}).get('job_type')
         worker_id = user_data.get('user_data', {}).get('worker_id')
-        hours = user_data.get('user_data', {}).get('hours')
+        hours = 0
         email = user_data.get('user_data', {}).get('email')
         unavailability = {}
         password = user_data.get('user_data', {}).get('password')
