@@ -68,7 +68,7 @@ def create_user(request):
         # print(password)
 
         # Check if all required fields are provided
-        if lastname and firstname and worker_type and job_type and worker_id and hours:
+        if lastname and firstname and worker_type and job_type and worker_id and email and password:
             # Create a new user document to be inserted into MongoDB
             new_user = {
                 'lastname': lastname,
@@ -173,6 +173,7 @@ def login(request):
     # Check if email and password are provided
     if email and password:
         # Find user by email in the database
+        print(email)
         user = users_collection.find_one({'email': email})
         
         # If user is found

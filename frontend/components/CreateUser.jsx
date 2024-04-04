@@ -7,7 +7,6 @@ export function CreateUser() {
         firstname: '',
         lastname: '',
         worker_id: '',
-        hours: '',
         job_type: '',
         worker_type: '',
         email: '',

@@ -10,22 +10,25 @@ export function Login() {
 
     async function handleLogin(e) {
         e.preventDefault()
-        
-        let userObject = {email: email, password: password}
+        try {
+            let userObject = {email: email, password: password}
+            let loginSuccessful = await verifyUser(userObject)
 
-        let loginSuccessful = await verifyUser(userObject)
+            if (!loginSuccessful) {
+                alert("Login information incorrect")
+                return
+            }
 
-        if (!loginSuccessful) {
-            alert("Login information incorrect")
-            return
+            //Store user obj in session storage to validate 
+            //sessionStorage.setItem()
+            navigate("/home")
+        } catch (e) {
+            console.log(`Error happened during login: ${e}`)
         }
-        //Store user obj in session storage to validate 
-        //sessionStorage.setItem()
-        navigate("/home")
     }
 
     return (
-        <form onSubmit={() => handleLogin(e)} className="flex flex-col">
+        <form onSubmit={(e) => handleLogin(e)} className="flex flex-col">
             <input onChange={(e) => setEmail(e.target.value)} placeholder="Truman Email" className="m-2 p-2 rounded-md" required/>
             <input onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="m-2 p-2 rounded-md" required/>
             <button type="submit" className="bg-purple-400">Login</button>
