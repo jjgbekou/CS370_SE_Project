@@ -97,27 +97,27 @@ def create_user(request):
         # If no user data is provided, return a bad request response
         return JsonResponse({"error": "No user data provided"}, status=400)    
 
-def delete_user(request):
-    # Decode JSON data from the request body
-    data = json.loads(request.body.decode('utf-8'))
+# def delete_user(request):
+#     # Decode JSON data from the request body
+#     data = json.loads(request.body.decode('utf-8'))
     
-    # Extract the worker_id of the user to be deleted
-    worker_id = data.get('worker_id')
+#     # Extract the worker_id of the user to be deleted
+#     worker_id = data.get('worker_id')
     
-    # Check if worker_id is provided
-    if worker_id:
-        # Attempt to delete the user with the specified worker_id
-        result = users_collection.delete_one({'worker_id': worker_id})
+#     # Check if worker_id is provided
+#     if worker_id:
+#         # Attempt to delete the user with the specified worker_id
+#         result = users_collection.delete_one({'worker_id': worker_id})
         
-        # Check if a user was actually deleted
-        if result.deleted_count > 0:
-            return JsonResponse({"message": "User deleted successfully"})
-        else:
-            # If no users were deleted, it means no user with the given worker_id was found
-            return JsonResponse({"error": "User not found"}, status=404)
-    else:
-        # If no worker_id is provided in the request, return an error
-        return JsonResponse({"error": "Worker ID missing"}, status=400)
+#         # Check if a user was actually deleted
+#         if result.deleted_count > 0:
+#             return JsonResponse({"message": "User deleted successfully"})
+#         else:
+#             # If no users were deleted, it means no user with the given worker_id was found
+#             return JsonResponse({"error": "User not found"}, status=404)
+#     else:
+#         # If no worker_id is provided in the request, return an error
+#         return JsonResponse({"error": "Worker ID missing"}, status=400)
     
 def update_user(request):
     # Decode JSON data from request body
