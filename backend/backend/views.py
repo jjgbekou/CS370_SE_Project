@@ -12,28 +12,7 @@ db = client['SchedulingProject']
 # Access or create collection for users/workers
 users_collection = db['user']
 
-
-# def create_user(request):
-#     # Your create user logic here
-#     return JsonResponse({"message": "User created successfully"})
-# def get_user(request, user_id):
-#     user = get_object_or_404(User, pk=user_id)
-#     #serializer = UserSerializer(user)
-#     return JsonResponse(serializer.data)
-
-# def update_user(request, user_id):
-#     # Your update user logic here
-#     return JsonResponse({"message": "User updated successfully"})
-
-# def delete_user(request, user_id):
-#     # Your delete user logic here
-#     return JsonResponse({"message": "User deleted successfully"})
-
-# def get_all_users(request):
-#     #users = User.objects.all()
-#     #serializer = UserSerializer(users, many=True)
-#     return JsonResponse(safe=False)
-
+SEMESTER_SCHOLARSHIP_HOURS = 0
 
 def create_user(request):
     # Extracting data from the request (assuming it's sent as JSON)
@@ -43,8 +22,6 @@ def create_user(request):
 
     # Check if user_data is not None
     if user_data:
-        # Parse the JSON data into a Python dictionary
-        #user_data = json.loads(user_data)
         
         # Extracting user attributes from the user_data
         lastname = user_data.get('user_data', {}).get('lastname')
@@ -52,37 +29,43 @@ def create_user(request):
         worker_type = user_data.get('user_data', {}).get('worker_type')
         job_type = user_data.get('user_data', {}).get('job_type')
         worker_id = user_data.get('user_data', {}).get('worker_id')
-        hours = 0
+        work_study_hours = user_data.get('user_data', {}).get('hours')
         email = user_data.get('user_data', {}).get('email')
-        unavailability = {}
         password = user_data.get('user_data', {}).get('password')
         encrypted_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        unavailability = {}
 
-        # print(lastname)
-        # print(firstname)
-        # print(worker_type)
-        # print(job_type)
-        # print(worker_id)
-        # print(hours)
-        # print(email)
-        # print(password)
+        scholarship_hours = 0
 
         # Check if all required fields are provided
         if lastname and firstname and worker_type and job_type and worker_id and email and password:
             # Create a new user document to be inserted into MongoDB
-            new_user = {
-                'lastname': lastname,
-                'firstname': firstname,
-                'worker_type': worker_type,
-                'job_type': job_type,
-                'worker_id' : worker_id,
-                'hours' : hours,
-                'email' : email,
-                'password' : encrypted_password,
-                'unavailability' : unavailability
-            }
-            
-            print("We made it here")
+            if job_type == "Scholarship":
+                scholarship_hours = SEMESTER_SCHOLARSHIP_HOURS
+                new_user = {
+                    'lastname': lastname,
+                    'firstname': firstname,
+                    'worker_type': worker_type,
+                    'job_type': job_type,
+                    'worker_id' : worker_id,
+                    'hours' : scholarship_hours,
+                    'email' : email,
+                    'password' : encrypted_password,
+                    'unavailability' : unavailability
+                }
+            else:
+                new_user = {
+                    'lastname': lastname,
+                    'firstname': firstname,
+                    'worker_type': worker_type,
+                    'job_type': job_type,
+                    'worker_id' : worker_id,
+                    'hours' : work_study_hours,
+                    'email' : email,
+                    'password' : encrypted_password,
+                    'unavailability' : unavailability
+                }
+
             # Insert the new user document into the MongoDB collection
             users_collection.insert_one(new_user)
             
@@ -97,62 +80,29 @@ def create_user(request):
         # If no user data is provided, return a bad request response
         return JsonResponse({"error": "No user data provided"}, status=400)    
 
-# def delete_user(request):
-#     # Decode JSON data from the request body
-#     data = json.loads(request.body.decode('utf-8'))
+def delete_user(request):
+    # Decode JSON data from the request body
+    student = json.loads(request.body.decode('utf-8'))
     
-#     # Extract the worker_id of the user to be deleted
-#     worker_id = data.get('worker_id')
+    # Extract the worker_id of the user to be deleted
+    worker_id = student.get('worker_id')
     
-#     # Check if worker_id is provided
-#     if worker_id:
-#         # Attempt to delete the user with the specified worker_id
-#         result = users_collection.delete_one({'worker_id': worker_id})
+    # Check if worker_id is provided
+    if worker_id:
+        # Attempt to delete the user with the specified worker_id
+        result = users_collection.delete_one({'worker_id': worker_id})
         
-#         # Check if a user was actually deleted
-#         if result.deleted_count > 0:
-#             return JsonResponse({"message": "User deleted successfully"})
-#         else:
-#             # If no users were deleted, it means no user with the given worker_id was found
-#             return JsonResponse({"error": "User not found"}, status=404)
-#     else:
-#         # If no worker_id is provided in the request, return an error
-#         return JsonResponse({"error": "Worker ID missing"}, status=400)
-    
-def update_user(request):
-    # Decode JSON data from request body
-    data = json.loads(request.body.decode('utf-8'))
-
-    # Extract the worker_id and other fields that could be updated
-    worker_id = data.get('worker_id')
-    updates = data.get('updates')  # Assuming updates are passed as a dictionary
-
-    # Check if both worker_id and updates are provided
-    if worker_id and updates:
-        # If password is in updates, it needs to be encrypted before updating
-        if 'password' in updates:
-            password = updates['password']
-            encrypted_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-            updates['password'] = encrypted_password
-
-        # Construct the query for MongoDB
-        query = {'worker_id': worker_id}
-        new_values = {'$set': updates}
-
-        # Attempt to update the user in the database
-        result = users_collection.update_one(query, new_values)
-
-        # Check if the user document was found and updated
-        if result.matched_count > 0:
-            return JsonResponse({"message": "User updated successfully"})
+        # Check if a user was actually deleted
+        if result.deleted_count > 0:
+            return JsonResponse({"message": "User deleted successfully"})
         else:
-            # If no user with the given worker_id was found
+            # If no users were deleted, it means no user with the given worker_id was found
             return JsonResponse({"error": "User not found"}, status=404)
     else:
-        # If worker_id or updates are missing from the request
-        return JsonResponse({"error": "Worker ID or updates data missing"}, status=400)
+        # If no worker_id is provided in the request, return an error
+        return JsonResponse({"error": "Worker ID not provided"}, status=400)
 
-def random_scheduler_for_desk_assistant():
+def random_scheduler_for_desk_assistant(): 
     print("DA")
 
     # Fetch all workers categorized as Desk assistant
@@ -196,6 +146,8 @@ def random_scheduler_for_desk_assistant():
                 # Assign desk assistant to time slot
                 schedule[day][current_time.strftime('%H:%M')] = selected_desk_assistant
             current_time += timedelta(hours=1)
+
+    return JsonResponse(schedule) # Only managers get that and then they can share it with workers
 
 def update_unavailability(request): #Here, if worker updated its unavailability, app must check before it generates/copy-paste new schedules (next 2 weeks)
     print("Updating unavailability")
@@ -252,14 +204,71 @@ def login(request):
         return JsonResponse({"error": "Email or password missing"}, status=400)
 
 
-def update_hours():
-    print("This update hours")
+def get_scholarship_hours(request):
+    hours = json.loads(request.body.decode('utf-8'))
+    SEMESTER_SCHOLARSHIP_HOURS = hours
+
+
+def return_workers_info(request):
+    #Fetch all workers fro the database
+    all_workers = list(users_collection.find())
+    
+    workers_info = []
+    for worker in all_workers:
+        worker_info = {
+            'worker_id' : worker.get('worker_id'),
+            'firstname' : worker.get('firstname'),
+            'lastname' : worker.get('lastname')
+        }
+        workers_info.append(worker_info)
+    
+    return JsonResponse({'workers':workers_info})
+
+# def update_hours():
+#     print("This update hours")
+
 
 # def random_scheduler_for_mail_clerk():
 #     print("MC")
 
+
 # def update_desk_assistant_schedule():
 #     print("New DA")
 
+
 # def update_mail_clerk_schedule():
 #     print("New MC")
+
+
+# def update_user(request):
+#     # Decode JSON data from request body
+#     data = json.loads(request.body.decode('utf-8'))
+
+#     # Extract the worker_id and other fields that could be updated
+#     worker_id = data.get('worker_id')
+#     updates = data.get('updates')  # Assuming updates are passed as a dictionary
+
+#     # Check if both worker_id and updates are provided
+#     if worker_id and updates:
+#         # If password is in updates, it needs to be encrypted before updating
+#         if 'password' in updates:
+#             password = updates['password']
+#             encrypted_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+#             updates['password'] = encrypted_password
+
+#         # Construct the query for MongoDB
+#         query = {'worker_id': worker_id}
+#         new_values = {'$set': updates}
+
+#         # Attempt to update the user in the database
+#         result = users_collection.update_one(query, new_values)
+
+#         # Check if the user document was found and updated
+#         if result.matched_count > 0:
+#             return JsonResponse({"message": "User updated successfully"})
+#         else:
+#             # If no user with the given worker_id was found
+#             return JsonResponse({"error": "User not found"}, status=404)
+#     else:
+#         # If worker_id or updates are missing from the request
+#         return JsonResponse({"error": "Worker ID or updates data missing"}, status=400)
