@@ -97,6 +97,60 @@ def create_user(request):
         # If no user data is provided, return a bad request response
         return JsonResponse({"error": "No user data provided"}, status=400)    
 
+# def delete_user(request):
+#     # Decode JSON data from the request body
+#     data = json.loads(request.body.decode('utf-8'))
+    
+#     # Extract the worker_id of the user to be deleted
+#     worker_id = data.get('worker_id')
+    
+#     # Check if worker_id is provided
+#     if worker_id:
+#         # Attempt to delete the user with the specified worker_id
+#         result = users_collection.delete_one({'worker_id': worker_id})
+        
+#         # Check if a user was actually deleted
+#         if result.deleted_count > 0:
+#             return JsonResponse({"message": "User deleted successfully"})
+#         else:
+#             # If no users were deleted, it means no user with the given worker_id was found
+#             return JsonResponse({"error": "User not found"}, status=404)
+#     else:
+#         # If no worker_id is provided in the request, return an error
+#         return JsonResponse({"error": "Worker ID missing"}, status=400)
+    
+def update_user(request):
+    # Decode JSON data from request body
+    data = json.loads(request.body.decode('utf-8'))
+
+    # Extract the worker_id and other fields that could be updated
+    worker_id = data.get('worker_id')
+    updates = data.get('updates')  # Assuming updates are passed as a dictionary
+
+    # Check if both worker_id and updates are provided
+    if worker_id and updates:
+        # If password is in updates, it needs to be encrypted before updating
+        if 'password' in updates:
+            password = updates['password']
+            encrypted_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            updates['password'] = encrypted_password
+
+        # Construct the query for MongoDB
+        query = {'worker_id': worker_id}
+        new_values = {'$set': updates}
+
+        # Attempt to update the user in the database
+        result = users_collection.update_one(query, new_values)
+
+        # Check if the user document was found and updated
+        if result.matched_count > 0:
+            return JsonResponse({"message": "User updated successfully"})
+        else:
+            # If no user with the given worker_id was found
+            return JsonResponse({"error": "User not found"}, status=404)
+    else:
+        # If worker_id or updates are missing from the request
+        return JsonResponse({"error": "Worker ID or updates data missing"}, status=400)
 
 def random_scheduler_for_desk_assistant():
     print("DA")
@@ -179,7 +233,7 @@ def login(request):
         # If user is found
         if user:
             # Retrieve hashed password from the database
-            hashed_password = user.get('password')
+            hashed_password = user.get('user_data', {}).get('password')
             
             # Check if the provided password matches the hashed password
             if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
