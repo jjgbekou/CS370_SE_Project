@@ -222,8 +222,9 @@ def update_unavailability(request): #Here, if worker updated its unavailability,
 def login(request):
     # Extract email and password from request
     data = json.loads(request.body.decode('utf-8'))
-    email = data.get('user_data', {}).get('email')
-    password = data.get('user_data', {}).get('password')
+    print(data)
+    email = data.get('email')
+    password = data.get('password')
     # Check if email and password are provided
     if email and password:
         # Find user by email in the database
@@ -233,7 +234,8 @@ def login(request):
         # If user is found
         if user:
             # Retrieve hashed password from the database
-            hashed_password = user.get('user_data', {}).get('password')
+            print(user)
+            hashed_password = user.get('password')
             
             # Check if the provided password matches the hashed password
             if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
