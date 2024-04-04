@@ -252,6 +252,8 @@ def login(request):
         return JsonResponse({"error": "Email or password missing"}, status=400)
 
 
+def update_hours():
+    print("This update hours")
 
 # def random_scheduler_for_mail_clerk():
 #     print("MC")
