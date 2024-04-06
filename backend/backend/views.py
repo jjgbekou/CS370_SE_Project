@@ -110,48 +110,73 @@ def random_scheduler_for_desk_assistant():
     # Fetch all workers categorized as Desk assistant
     desk_assistants = users_collection.find({'job_type': 'Desk worker'})
     
-    # Dictionary to store unavailability for each day
-    unavailability = {
-        'Monday': [],
-        'Tuesday': [],
-        'Wednesday': [],
-        'Thursday': [],
-        'Friday': [],
-        'Saturday': [],
-        'Sunday': []
-    }
+    big_schedule = {}
 
-    # Iterate through each desk assistant
-    for desk_assistant in desk_assistants:
-        # Retrieve their unavailability
-        for day, slots in desk_assistant['unavailability'].items():
-            unavailability[day].extend(slots)
-    
-    # Generate schedule for each day
-    schedule = {} 
-    for day, slots in unavailability.items():
-        schedule[day] = {}
+    # Iterate over each day of the week
+    for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']:
+        big_schedule[day] = {}
+        
+        # Generate schedule for each time slot of the day
         start_time = datetime.strptime('08:30', '%H:%M')
         end_time = datetime.strptime('16:30', '%H:%M')
         current_time = start_time
+        
         while current_time < end_time:
-            # Check availability of each desk assistant for the current time slot
+            # Initialize list of available desk assistants for the current time slot
             available_desk_assistants = []
-            for da in desk_assistants:
-                # Check if the desk assistant is available at the current time
-                if current_time.strftime('%H:%M') not in da['unavailability'].get(day, []):
-                    available_desk_assistants.append(da['firstname'] + ' ' + da['lastname'])
+            
+            # Check availability of each desk assistant for the current time slot
+            for desk_assistant in desk_assistants:
+                # Check if the desk assistant is available at the current time slot on the current day
+                if current_time.strftime('%H:%M') not in desk_assistant['unavailability'].get(day, []):
+                    available_desk_assistants.append(desk_assistant['firstname'] + ' ' + desk_assistant['lastname'])
                     
             # Randomly select a desk assistant from the available ones
             if available_desk_assistants:
                 selected_desk_assistant = random.choice(available_desk_assistants)
                 # Assign desk assistant to time slot
-                schedule[day][current_time.strftime('%H:%M')] = selected_desk_assistant
+                big_schedule[day][current_time.strftime('%H:%M')] = selected_desk_assistant
+            else:
+                big_schedule[day][current_time.strftime('%H:%M')] = 'XXXXX'
+            
+            # Move to the next time slot
             current_time += timedelta(hours=1)
     
+    big_schedule['release']['state'] = False
+    #Empty the schedule colllection
+    schedule.delete_many({})
+    # Insert the new schedule into the schedule collection
+    insertion_result = schedule.insert_one(big_schedule)
+    if big_schedule and insertion_result:
+        return JsonResponse({"message": "Schedule created successfully"})
+        
+
+def release_schedule():
+    # Find the document in the schedule collection
+    schedule_document = schedule.find_one({})
     
-    schedule.insert_one(schedule)
-    #return JsonResponse(schedule) # Only managers get that and then they can share it with workers
+    # Check if the document exists
+    if schedule_document:
+        # Get the big_schedule dictionary from the document
+        big_schedule = schedule_document
+        
+        # Update the value of big_schedule[release][state] to True
+        release = 'release'  # Replace 'release' with the actual key for release in your dictionary
+        state = 'state'      # Replace 'state' with the actual key for state in your dictionary
+        if release in big_schedule and state in big_schedule[release]:
+            big_schedule[release][state] = True
+            
+            # Update the document in the schedule collection
+            schedule.update_one({}, {"$set": big_schedule})
+            schedule_to_be_returned = schedule.find_one({})
+            return JsonResponse({"message": "Schedule released successfully"}, schedule_to_be_returned)
+        else:
+            print("Can't release schedule at the moment, release and state keys not found")
+    else:
+        print("No schedule found in the schedule collection.")
+
+
+
 
 def update_unavailability(request): #Here, if worker updated its unavailability, app must check before it generates/copy-paste new schedules (next 2 weeks)
     print("Updating unavailability")
@@ -166,10 +191,14 @@ def update_unavailability(request): #Here, if worker updated its unavailability,
         # Find the user by worker_id and update their unavailability
         query = {'worker_id': worker_id}
         new_values = {'$set': {'unavailability': unavailability}}
-        users_collection.update_one(query, new_values)
+        result = users_collection.update_one(query, new_values)
         
         # Return success response
-        return JsonResponse({"message": "Unavailability updated successfully"})
+        if result:
+            return JsonResponse({"message": "Unavailability updated successfully"})
+        else:
+            return JsonResponse({"message": "Data received correctly but failure to update user's unavailability"})
+
     else:
         # Return error response if worker_id or unavailability is missing
         return JsonResponse({"error": "Worker ID or unavailability data missing"}, status=400)
@@ -215,7 +244,7 @@ def get_scholarship_hours(request):
     SEMESTER_SCHOLARSHIP_HOURS = hours
 
 
-def return_workers_info(request):
+def return_workers_info():
     #Fetch all workers fro the database
     all_workers = list(users_collection.find())
     
@@ -224,11 +253,15 @@ def return_workers_info(request):
         worker_info = {
             'worker_id' : worker.get('worker_id'),
             'firstname' : worker.get('firstname'),
-            'lastname' : worker.get('lastname')
+            'lastname' : worker.get('lastname'),
+            'unavailability' : worker.get('unavailability')
         }
         workers_info.append(worker_info)
     
-    return JsonResponse({'workers':workers_info})
+    #return JsonResponse({'workers':workers_info})
+    print(workers_info)
+
+return_workers_info()
 
 # def update_hours():
 #     print("This update hours")
