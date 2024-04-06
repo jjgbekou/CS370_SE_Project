@@ -33,7 +33,14 @@ export function UserAvailability() {
     const startMinute = 30;
     const slotHour = Math.floor(slotIndex / 2) + startHour;
     const slotMinute = slotIndex % 2 === 0 ? startMinute : 0;
-    return `${slotHour}:${slotMinute === 0 ? '30' : '00'}`;
+    //return `${slotHour}:${slotMinute === 0 ? '00' : '30'}`;
+    if (slotMinute === 60)
+    {
+      slotHour +=1;
+      slotMinute = 0;
+    }
+    return `${slotHour}:${slotMinute === 0 ? '00' : '30'}`;
+
   };
 
   async function handleSubmit() {
