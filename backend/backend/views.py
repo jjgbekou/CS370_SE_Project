@@ -109,7 +109,7 @@ def random_scheduler_for_desk_assistant():
     print("DA")
 
     # Fetch all workers categorized as Desk assistant
-    desk_assistants = users_collection.find({'job_type': 'Desk worker'})
+    desk_assistants = users_collection.find({'job_type': 'Mail Clerk'})
     
     big_schedule = {}
 
