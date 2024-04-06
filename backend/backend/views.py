@@ -196,12 +196,7 @@ def update_unavailability(request): #Here, if worker updated its unavailability,
         # Find the user by worker_id and update their unavailability
         query = {'_id': ObjectId(str(worker_id))}
         new_values = {'$set': {'unavailability': unavailability}}
-<<<<<<< HEAD
         result = users_collection.update_one(query, new_values)
-=======
-        print(query)
-        users_collection.update_one(query, new_values)
->>>>>>> f29f3e8643898060fd2d884d79cc87e3d376a672
         
         # Return success response
         if result:

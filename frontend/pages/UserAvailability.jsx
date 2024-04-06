@@ -27,14 +27,16 @@ export function UserAvailability() {
     setAvailability(updatedAvailability);
   };
 
-  // Function to calculate the time for each slot
-  const calculateTime = (slotIndex) => {
-    const startHour = 8;
-    const startMinute = 30;
-    const slotHour = Math.floor(slotIndex / 2) + startHour;
-    const slotMinute = slotIndex % 2 === 0 ? startMinute : 0;
-    return `${slotHour}:${slotMinute === 0 ? '30' : '00'}`;
-  };
+ // Function to calculate the time for each slot
+const calculateTime = (slotIndex) => {
+  const startHour = 8;
+  const startMinute = 30;
+  const totalMinutes = startMinute + (slotIndex * 30); // Calculate total minutes from start time
+  const slotHour = Math.floor(totalMinutes / 60) + startHour; // Calculate slot hour
+  const slotMinute = totalMinutes % 60; // Calculate slot minute
+  return `${slotHour}:${slotMinute < 10 ? '0' : ''}${slotMinute}`; // Format the time
+};
+
 
   async function handleSubmit() {
     let user_id = sessionStorage.getItem("userId")
@@ -48,7 +50,7 @@ export function UserAvailability() {
         <thead>
           <tr>
             <th className="px-4 py-2 border border-gray-500"></th>
-            {[...Array(16)].map((_, i) => (
+            {[...Array(19)].map((_, i) => (
               <th key={i} className="px-4 py-2 text-center border border-gray-500">{calculateTime(i)}</th>
             ))}
           </tr>
@@ -57,7 +59,7 @@ export function UserAvailability() {
           {Object.keys(availability).map(day => (
             <tr key={day}>
               <td className="px-4 py-2 font-semibold border border-gray-500">{day}</td>
-              {[...Array(16)].map((_, slotIndex) => (
+              {[...Array(19)].map((_, slotIndex) => (
                 <td
                   key={slotIndex}
                   className={`px-4 py-2 text-center cursor-pointer border border-gray-500 ${availability[day][slotIndex] ? 'bg-green-500' : 'bg-gray-200'}`}
