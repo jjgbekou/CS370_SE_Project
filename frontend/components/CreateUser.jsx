@@ -10,7 +10,8 @@ export function CreateUser() {
         job_type: '',
         worker_type: '',
         email: '',
-        password: ''
+        password: '',
+        hours: 0
       });
 
       const handleChange = (e) => {
@@ -38,6 +39,9 @@ export function CreateUser() {
               <option value="Scholarship">Scholarship</option>
               <option value="Work-Study">Work-Study</option>
             </select>
+            {user.worker_type === 'Work-Study' && ( // Show hours field only if worker type is 'Work-Study'
+              <input type="number" name="hours" placeholder="Number of Hours" value={user.hours} onChange={handleChange} required />
+            )}
             <select name="job_type" value={user.job_type} onChange={handleChange} className="m-2 p-2 rounded-md" required>
               <option value="">Select Job Type</option>
               <option value="Desk worker">Desk Worker</option>

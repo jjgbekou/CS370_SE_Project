@@ -5,6 +5,7 @@ import json
 import bcrypt
 from datetime import datetime, timedelta
 import random
+from bson import json_util
 # Establish connection to MongoDB
 client = MongoClient('mongodb+srv://Austin:370@cluster0.qddlbum.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 # Access or create database
@@ -189,10 +190,12 @@ def login(request):
             print(user)
             hashed_password = user.get('password')
             
+            
             # Check if the provided password matches the hashed password
             if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
                 # Return success message upon successful login
-                return JsonResponse({"message": "Login successful"})
+                user_id = user.get('_id')
+                return JsonResponse({"message": "Login successful", "id": json_util.dumps(user_id)})
             else:
                 # Return error response if password is incorrect
                 return JsonResponse({"error": "Incorrect password"}, status=401)

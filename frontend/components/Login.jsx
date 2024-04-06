@@ -12,7 +12,8 @@ export function Login() {
         e.preventDefault()
         try {
             let userObject = {email: email, password: password}
-            let loginSuccessful = await verifyUser(userObject)
+            let loginResponse = await verifyUser(userObject)
+            let loginSuccessful = loginResponse.success
 
             if (!loginSuccessful) {
                 alert("Login information incorrect")
@@ -20,7 +21,7 @@ export function Login() {
             }
 
             //Store user obj in session storage to validate 
-            //sessionStorage.setItem()
+            sessionStorage.setItem("User", loginResponse.id)
             navigate("/home")
         } catch (e) {
             console.log(`Error happened during login: ${e}`)
