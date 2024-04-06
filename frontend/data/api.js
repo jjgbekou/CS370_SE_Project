@@ -7,7 +7,7 @@ export async function getUser(userId) {
 
 export async function updateUserAvailability(userObject) {
     try {
-        let data = axios.get(`${BASE_URL}/update_unavailability/`, {user_data: userObject})
+        let data = axios.put(`${BASE_URL}/update_unavailability/`, {user_data: userObject})
         return data
     } catch (error) {
         console.log(`Error occured during creation: ${error}`)
@@ -18,8 +18,10 @@ export async function updateUserAvailability(userObject) {
 export async function verifyUser(userObject) {
     let data = await axios.post(`${BASE_URL}/login/`, userObject)
     if (data.status === 200) {
+        let user_id = data.data.id
+        console.log(typeof user_id)
         return {
-            id: data.data.id,
+            id: user_id,
             success: true
         }
     } else {

@@ -20,8 +20,9 @@ export function Login() {
                 return
             }
 
-            //Store user obj in session storage to validate 
-            sessionStorage.setItem("User", loginResponse.id)
+            let id = loginResponse.id
+            let stringId = id[`$oid`]
+            sessionStorage.setItem("userId", stringId)
             navigate("/home")
         } catch (e) {
             console.log(`Error happened during login: ${e}`)
