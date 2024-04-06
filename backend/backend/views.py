@@ -12,6 +12,7 @@ client = MongoClient('mongodb+srv://Austin:370@cluster0.qddlbum.mongodb.net/?ret
 db = client['SchedulingProject']
 # Access or create collection for users/workers
 users_collection = db['user']
+schedule = db['schedule']
 
 SEMESTER_SCHOLARSHIP_HOURS = 0
 
@@ -107,7 +108,7 @@ def random_scheduler_for_desk_assistant():
     print("DA")
 
     # Fetch all workers categorized as Desk assistant
-    desk_assistants = users_collection.find({'job_type': 'desk assistant'})
+    desk_assistants = users_collection.find({'job_type': 'Desk worker'})
     
     # Dictionary to store unavailability for each day
     unavailability = {
@@ -147,8 +148,10 @@ def random_scheduler_for_desk_assistant():
                 # Assign desk assistant to time slot
                 schedule[day][current_time.strftime('%H:%M')] = selected_desk_assistant
             current_time += timedelta(hours=1)
-
-    return JsonResponse(schedule) # Only managers get that and then they can share it with workers
+    
+    
+    schedule.insert_one(schedule)
+    #return JsonResponse(schedule) # Only managers get that and then they can share it with workers
 
 def update_unavailability(request): #Here, if worker updated its unavailability, app must check before it generates/copy-paste new schedules (next 2 weeks)
     print("Updating unavailability")
