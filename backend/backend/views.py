@@ -6,6 +6,7 @@ import bcrypt
 from datetime import datetime, timedelta
 import random
 from bson import json_util
+from bson import ObjectId
 # Establish connection to MongoDB
 client = MongoClient('mongodb+srv://Austin:370@cluster0.qddlbum.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 # Access or create database
@@ -181,17 +182,26 @@ def release_schedule():
 def update_unavailability(request): #Here, if worker updated its unavailability, app must check before it generates/copy-paste new schedules (next 2 weeks)
     print("Updating unavailability")
     # Decode JSON data from request body
+    print(request)
     data = json.loads(request.body.decode('utf-8'))
     # Extract necessary data
+    print(data)
     worker_id = data.get('user_data', {}).get('worker_id')
     unavailability = data.get('user_data', {}).get('unavailability')
+    print(worker_id)
+    print(unavailability)
     
     # Check if worker_id and unavailability are provided
     if worker_id and unavailability:
         # Find the user by worker_id and update their unavailability
-        query = {'worker_id': worker_id}
+        query = {'_id': ObjectId(str(worker_id))}
         new_values = {'$set': {'unavailability': unavailability}}
+<<<<<<< HEAD
         result = users_collection.update_one(query, new_values)
+=======
+        print(query)
+        users_collection.update_one(query, new_values)
+>>>>>>> f29f3e8643898060fd2d884d79cc87e3d376a672
         
         # Return success response
         if result:
@@ -207,27 +217,24 @@ def update_unavailability(request): #Here, if worker updated its unavailability,
 def login(request):
     # Extract email and password from request
     data = json.loads(request.body.decode('utf-8'))
-    print(data)
     email = data.get('email')
     password = data.get('password')
     # Check if email and password are provided
     if email and password:
         # Find user by email in the database
-        print(email)
         user = users_collection.find_one({'email': email})
         
         # If user is found
         if user:
             # Retrieve hashed password from the database
-            print(user)
             hashed_password = user.get('password')
-            
             
             # Check if the provided password matches the hashed password
             if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
                 # Return success message upon successful login
                 user_id = user.get('_id')
-                return JsonResponse({"message": "Login successful", "id": json_util.dumps(user_id)})
+                id = json.loads(json_util.dumps(user_id))
+                return JsonResponse({"message": "Login successful", "id": id})
             else:
                 # Return error response if password is incorrect
                 return JsonResponse({"error": "Incorrect password"}, status=401)
@@ -263,12 +270,14 @@ def return_workers_info():
 
 return_workers_info()
 
+
+
 # def update_hours():
 #     print("This update hours")
 
 
 # def random_scheduler_for_mail_clerk():
-#     print("MC")
+#     print("MC")W
 
 
 # def update_desk_assistant_schedule():

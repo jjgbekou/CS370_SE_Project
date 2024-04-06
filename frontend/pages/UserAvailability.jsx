@@ -37,10 +37,9 @@ export function UserAvailability() {
   };
 
   async function handleSubmit() {
-    let user_id = sessionStorage.getItem("id")
+    let user_id = sessionStorage.getItem("userId")
     let userObject = {worker_id: user_id, unavailability: availability}
     let data = await updateUserAvailability(userObject)
-    console.log(data)
   }
 
   return (
