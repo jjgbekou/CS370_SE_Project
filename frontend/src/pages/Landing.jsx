@@ -8,7 +8,7 @@ export function Landing() {
     const [mode, setMode] = useState(true)
 
     return (
-        <>
+        <div className="flex content-center justify-items-center justify-center w-screen">
             {mode ? 
             <>
                 <Login/>
@@ -19,6 +19,6 @@ export function Landing() {
                 <CreateUser/>
                 <span onClick={() => setMode(true)} className="cursor-pointer text-sm my-7">Login Existing Account</span>
             </>}
-        </>
+        </div>
     )
 }

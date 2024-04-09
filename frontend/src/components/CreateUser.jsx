@@ -49,7 +49,7 @@ export function CreateUser() {
             </select>
             <input type="email" name="email" placeholder="Email" value={user.email} onChange={handleChange} className="m-2 p-2 rounded-md" required />
             <input type="password" name="password" placeholder="Password" value={user.password} onChange={handleChange} className="m-2 p-2 rounded-md" required />
-            <button type="submit" className="m-2 border-solid border-2 rounded-md border-white bg-purple-400">Create User</button>
+            <button type="submit" className="m-2 border-solid border-2 rounded-md border-white bg-truman-purple">Create User</button>
           </form>
         </>
     )

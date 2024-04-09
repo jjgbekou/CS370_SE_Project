@@ -1,13 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["../frontend/**/*.jsx"],
+  content: [
+    "./index.html",
+    "./src/**/*.jsx"
+  ],
   theme: {
     extend: {
-
+      colors: {
+        'truman-purple': '#510C76'
+      }
     },
-    colors: {
-      trumanPurple: 'rbg(81,12 118)'
-    }
   },
   plugins: [],
 }

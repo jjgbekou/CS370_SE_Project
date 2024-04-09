@@ -64,7 +64,7 @@ const calculateTime = (slotIndex) => {
                   key={slotIndex}
                   className={`px-4 py-2 text-center cursor-pointer border border-gray-500 ${availability[day][slotIndex] ? 'bg-green-500' : 'bg-gray-200'}`}
                   onClick={() => toggleAvailability(day, slotIndex)}
-                >{availability[day][slotIndex] ? `${availability[day][slotIndex][0]} - ${availability[day][slotIndex][1]}` : ''}</td>
+                />
               ))}
             </tr>
           ))}
