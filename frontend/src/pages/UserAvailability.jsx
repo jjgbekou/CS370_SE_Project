@@ -39,7 +39,8 @@ const calculateTime = (slotIndex) => {
 
 
   async function handleSubmit() {
-    let user_id = sessionStorage.getItem("userId")
+    let user = JSON.parse(sessionStorage.getItem("User"))
+    let user_id = user.userId
     let userObject = {worker_id: user_id, unavailability: availability}
     let data = await updateUserAvailability(userObject)
   }

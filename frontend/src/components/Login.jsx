@@ -11,9 +11,10 @@ export function Login() {
     async function handleLogin(e) {
         e.preventDefault()
         try {
-            let userObject = {email: email, password: password}
-            let loginResponse = await verifyUser(userObject)
+            let loginObject = {email: email, password: password}
+            let loginResponse = await verifyUser(loginObject)
             let loginSuccessful = loginResponse.success
+            let loginView = loginResponse.view
 
             if (!loginSuccessful) {
                 alert("Login information incorrect")
@@ -22,7 +23,9 @@ export function Login() {
 
             let id = loginResponse.id
             let stringId = id[`$oid`]
-            sessionStorage.setItem("userId", stringId)
+            let view = loginResponse.view
+            let userObject = JSON.stringify({userId: stringId, view: view})
+            sessionStorage.setItem("User", userObject)
             navigate("/home")
         } catch (e) {
             console.log(`Error happened during login: ${e}`)

@@ -19,9 +19,11 @@ export async function verifyUser(userObject) {
     let data = await axios.post(`${BASE_URL}/login/`, userObject)
     if (data.status === 200) {
         let user_id = data.data.id
-        console.log(typeof user_id)
+        let view = data.data.isManager ? "Manager" : "User"
+        
         return {
             id: user_id,
+            view: view,
             success: true
         }
     } else {
@@ -57,6 +59,11 @@ export async function deleteUser(userId) {
 
 export async function generateSchedule() {
     let data = axios.post()
+}
+
+export async function getSchedule() {
+    let data = axios.get(`${BASE_URL}/release_schedule/`)
+    return data
 }
 
 export async function updateSchedule(scheduleId) {
