@@ -13,6 +13,10 @@ export function UserAvailability() {
     Sunday: []
   });
 
+  let user = JSON.parse(sessionStorage.getItem("User"))
+  let userView = user.view == "User"
+  console.log(userView)
+
   // Function to toggle availability of a specific slot
   const toggleAvailability = (day, slotIndex) => {
     const updatedAvailability = { ...availability };
@@ -46,32 +50,40 @@ const calculateTime = (slotIndex) => {
   }
 
   return (
-    <div className="availability-picker">
-      <table className="table-auto border border-gray-500">
-        <thead>
-          <tr>
-            <th className="px-4 py-2 border border-gray-500"></th>
-            {[...Array(19)].map((_, i) => (
-              <th key={i} className="px-4 py-2 text-center border border-gray-500">{calculateTime(i)}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {Object.keys(availability).map(day => (
-            <tr key={day}>
-              <td className="px-4 py-2 font-semibold border border-gray-500">{day}</td>
-              {[...Array(19)].map((_, slotIndex) => (
-                <td
-                  key={slotIndex}
-                  className={`px-4 py-2 text-center cursor-pointer border border-gray-500 ${availability[day][slotIndex] ? 'bg-green-500' : 'bg-gray-200'}`}
-                  onClick={() => toggleAvailability(day, slotIndex)}
-                />
+    <>
+    {
+      userView 
+      ? 
+      <div className="availability-picker">
+        <table className="table-auto border border-gray-500">
+          <thead>
+            <tr>
+              <th className="px-4 py-2 border border-gray-500"></th>
+              {[...Array(19)].map((_, i) => (
+                <th key={i} className="px-4 py-2 text-center border border-gray-500">{calculateTime(i)}</th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <button className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleSubmit}>Submit Availability</button>
+          </thead>
+          <tbody>
+            {Object.keys(availability).map(day => (
+              <tr key={day}>
+                <td className="px-4 py-2 font-semibold border border-gray-500">{day}</td>
+                {[...Array(19)].map((_, slotIndex) => (
+                  <td
+                    key={slotIndex}
+                    className={`px-4 py-2 text-center cursor-pointer border border-gray-500 ${availability[day][slotIndex] ? 'bg-green-500' : 'bg-gray-200'}`}
+                    onClick={() => toggleAvailability(day, slotIndex)}
+                  />
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleSubmit}>Submit Availability</button>
     </div>
+    :
+    <h1>You do not have permission to access this page</h1>
+    }
+  </>
   );
 };

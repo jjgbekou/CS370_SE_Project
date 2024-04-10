@@ -1,6 +1,6 @@
 
 
-export const routes = [
+export const userRoutes = [
     {
         name: "Schedule",
         path: '/home'
@@ -10,11 +10,18 @@ export const routes = [
         path: '/availability'
     },
     {
-        name: "Profile",
-        path: "/profile"
-    },
-    {
         name: "My Schedule",
         path: '/myschedule/:id'
+    }
+]
+
+export const managerRoutes = [
+    {
+        name: "Schedule",
+        path: '/home'
+    },
+    {
+        name: "User List",
+        path: '/userlist'
     }
 ]
