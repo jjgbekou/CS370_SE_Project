@@ -19,6 +19,40 @@ managers_collection = db['manager']
 
 SEMESTER_SCHOLARSHIP_HOURS = 0
 
+def create_manager(request):
+    #Create a manager
+    manager_data = json.loads(request.body.decode('utf-8'))
+
+    if manager_data:
+        lastname = manager_data.get('manager_data', {}).get('lastname')
+        firstname = manager_data.get('manager_data', {}).get('firstname')
+        email = manager_data.get('manager_data', {}).get('email')
+        password = manager_data.get('manager_data', {}).get('password')
+        manager_id = manager_data.get('manager_data', {}).get('manager_id')
+        encrypted_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        if lastname and firstname and email and password and manager_id:
+            new_manager = {
+                'lastname': lastname,
+                'firstname': firstname,
+                'email': email,
+                'manager_id': manager_id,
+                'password': encrypted_password
+            }
+            # Insert the new user document into the MongoDB collection
+            managers_collection.insert_one(new_manager)
+            # Return a success message as a JSON response
+            return JsonResponse({"message": "Manager created successfully"})
+        else:
+            # If any required field is missing, return a bad request response
+            return JsonResponse({"error": "Missing required fields"}, status=400)
+    else:
+        # If no user data is provided, return a bad request response
+        return JsonResponse({"error": "No user data provided"}, status=400) 
+
+
+
+
+
 def create_user(request):
     # Extracting data from the request (assuming it's sent as JSON)
     #user_data = request.POST.get('user_data')  # Assuming user_data is sent in the request
