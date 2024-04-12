@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 import random
 from bson import json_util
 from bson import ObjectId
+import jwt
 # Establish connection to MongoDB
 client = MongoClient('mongodb+srv://Austin:370@cluster0.qddlbum.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 # Access or create database
@@ -14,6 +15,7 @@ db = client['SchedulingProject']
 # Access or create collection for users/workers
 users_collection = db['user']
 schedule = db['schedule']
+managers_collection = db['manager']
 
 SEMESTER_SCHOLARSHIP_HOURS = 0
 
@@ -75,11 +77,9 @@ def create_user(request):
             # Return a success message as a JSON response
             return JsonResponse({"message": "User created successfully"})
         else:
-            print("first else")
             # If any required field is missing, return a bad request response
             return JsonResponse({"error": "Missing required fields"}, status=400)
     else:
-        print("second else")
         # If no user data is provided, return a bad request response
         return JsonResponse({"error": "No user data provided"}, status=400)    
 
@@ -218,6 +218,7 @@ def login(request):
     if email and password:
         # Find user by email in the database
         user = users_collection.find_one({'email': email})
+        manager = managers_collection.find_one({'email': email})
         
         # If user is found
         if user:
@@ -229,7 +230,30 @@ def login(request):
                 # Return success message upon successful login
                 user_id = user.get('_id')
                 id = json.loads(json_util.dumps(user_id))
+                # token = jwt.encode({'user_id': str(user['_id'])}, 'SECRET_KEY', algorithm='HS256').decode('utf-8')
+                
+                # # Return the JWT token as a response
+                # return JsonResponse({"token": token})
                 return JsonResponse({"message": "Login successful", "id": id})
+            else:
+                # Return error response if password is incorrect
+                return JsonResponse({"error": "Incorrect password"}, status=401)
+            
+        elif manager:
+            # Retrieve hashed password from the database
+            hashed_password = manager.get('password')
+            
+            # Check if the provided password matches the hashed password
+            if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
+                # Return success message upon successful login
+                manager_id = manager.get('_id')
+                id = json.loads(json_util.dumps(manager_id))
+                # token = jwt.encode({'manager_id': str(manager['_id'])}, 'SECRET_KEY', algorithm='HS256').decode('utf-8')
+                
+                # # Return the JWT token as a response
+                # return JsonResponse({"token": token})
+                return JsonResponse({"message": "Login successful", "id": id})
+            
             else:
                 # Return error response if password is incorrect
                 return JsonResponse({"error": "Incorrect password"}, status=401)
