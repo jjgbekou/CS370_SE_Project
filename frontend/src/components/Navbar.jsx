@@ -1,13 +1,27 @@
 import { Link } from "react-router-dom"
-import { userRoutes, managerRoutes } from "../data/routes"
+import { managerRoutes } from "../data/routes"
 
 export function Navbar() {
 
     let user = JSON.parse(sessionStorage.getItem("User"))
-    console.log(user)
     let userView = user.view == "User"
-    console.log(userView)
+    let userId = user.userId
 
+    const userRoutes = [
+        {
+            name: "Schedule",
+            path: '/home'
+        },
+        {
+            name: "Availability",
+            path: '/availability'
+        },
+        {
+            name: "My Schedule",
+            path: `/myschedule/${userId}`
+        }
+    ]
+    
     return (
         <nav className="bg-truman-purple border-gray-200 bg-gray-900 w-screen fixed top-0 left-0">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">

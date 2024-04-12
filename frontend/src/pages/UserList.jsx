@@ -36,29 +36,31 @@ export function UserList() {
     }, [])*/
 
     return (
-        <div className="justify-center flex w-screen">
+        <div className="flex justify-center items-center w-full">
             {userView 
             ?
-            <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-                <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-truman-purple uppercase tracking-wider">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-truman-purple uppercase tracking-wider">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-truman-purple uppercase tracking-wider">Job Type</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-truman-purple uppercase tracking-wider">Worker Type</th>
-                </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200 text-truman-purple">
-                {users.map(user => (
-                <tr key={user.email}>
-                    <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{user.job_type}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{user.worker_type}</td>
-                </tr>
-                ))}
-            </tbody>
-            </table>
+            <div className="flex w-1/2">  
+                <table className="min-w-full divide-y justify-center divide-gray-200">
+                <thead className="bg-gray-50">
+                    <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-truman-purple uppercase tracking-wider">Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-truman-purple uppercase tracking-wider">Email</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-truman-purple uppercase tracking-wider">Job Type</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-truman-purple uppercase tracking-wider">Worker Type</th>
+                    </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200 text-truman-purple">
+                    {users.map(user => (
+                    <tr key={user.email}>
+                        <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{user.job_type}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{user.worker_type}</td>
+                    </tr>
+                    ))}
+                </tbody>
+                </table>
+            </div>
             :
             <h1>You do not have permission to access this page</h1>
             }

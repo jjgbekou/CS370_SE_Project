@@ -21,7 +21,7 @@ const generateTimeSlots = () => {
 const generateDates = () => {
   const dates = [];
   const today = moment().startOf('week'); // Start from Sunday of the current week
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 14; i++) {
     const date = today.clone().add(i, 'days');
     dates.push(date.format('M/D')); // Format: Month/Day
   }

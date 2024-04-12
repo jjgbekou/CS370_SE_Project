@@ -16,29 +16,38 @@ export async function updateUserAvailability(userObject) {
 }
 
 export async function verifyUser(userObject) {
-    let data = await axios.post(`${BASE_URL}/login/`, userObject)
-    if (data.status === 200) {
-        let user_id = data.data.id
-        let view = data.data.isManager ? "Manager" : "User"
-        
-        return {
-            id: user_id,
-            view: view,
-            success: true
+    try {
+        let data = await axios.post(`${BASE_URL}/login/`, userObject)
+        if (data.status === 200) {
+            let user_id = data.data.id
+            let view = data.data.isManager ? "Manager" : "User"
+            
+            return {
+                id: user_id,
+                view: view,
+                success: true
+            }
+        } else {
+            return {
+                success: false
+            }
         }
-    } else {
-        return {
-            success: false
-        }
+    } catch(error) {
+        console.log(`Login could not be validated: ${error}`)
     }
 }
 
 export async function getAllUsers() {
-    let data = axios.get()
+    try {
+        let data = axios.get(`${BASE_URL}/return_workers_info/`)
+        return data
+    } catch(error) {
+        console.log(`Error occured while fetching all users: ${error}`)
+    }
+
 }
 
 export async function createUser(userObject) {
-
     try {
         let data = await axios.post(`${BASE_URL}/create_user/`, {user_data: userObject})
         console.log(data)
@@ -54,18 +63,45 @@ export async function updateUser(userId, userObject) {
 }
 
 export async function deleteUser(userId) {
-    let data = axios.delete()
+    try {
+        let data = axios.delete(`${BASE_URL}/delete_user/${userId}`)
+        return data
+    } catch(error) {
+        console.log(`Error occured during deletion: ${error}`)
+    }
 }
 
 export async function generateSchedule() {
-    let data = axios.post()
+    try {
+        let data = axios.put()
+    } catch(error) {
+        console.log(`Schedule could not be generated: ${error}`)
+    }
 }
 
 export async function getSchedule() {
-    let data = axios.get(`${BASE_URL}/release_schedule/`)
-    return data
+    try {
+        let data = axios.get(`${BASE_URL}/get_schedule/`)
+        return data
+    } catch(error) {
+        console.log(`Schedule could not be retrieved: ${error}`)
+    }
+
+}
+
+export async function releaseSchedule() {
+    try {
+        let data = axios.put(`${BASE_URL}/release_schedule/`)
+        return data
+    } catch(error) {
+        console.log(`Error releasing schedule: ${error}`)
+    }
 }
 
 export async function updateSchedule(scheduleId) {
-    let data = axios.put()
+    try {
+        let data = axios.put()
+    } catch(error) {
+        console.log(`Error while updating schedule: ${error}`)
+    }
 }
