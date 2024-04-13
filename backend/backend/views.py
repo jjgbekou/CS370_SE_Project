@@ -53,57 +53,108 @@ def create_manager(request):
 
 
 
+# def create_user(request):
+#     # Extracting data from the request (assuming it's sent as JSON)
+#     #user_data = request.POST.get('user_data')  # Assuming user_data is sent in the request
+#     user_data = json.loads(request.body.decode('utf-8'))
+#     #print(user_data)
+
+#     # Check if user_data is not None
+#     if user_data:
+        
+#         # Extracting user attributes from the user_data
+#         lastname = user_data.get('user_data', {}).get('lastname')
+#         firstname = user_data.get('user_data', {}).get('firstname')
+#         worker_type = user_data.get('user_data', {}).get('worker_type')
+#         job_type = user_data.get('user_data', {}).get('job_type')
+#         worker_id = user_data.get('user_data', {}).get('worker_id')
+#         work_study_hours = user_data.get('user_data', {}).get('hours')
+#         email = user_data.get('user_data', {}).get('email')
+#         password = user_data.get('user_data', {}).get('password')
+#         encrypted_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+#         unavailability = {}
+
+#         scholarship_hours = 0
+
+#         # Check if all required fields are provided
+#         if lastname and firstname and worker_type and job_type and worker_id and email and password:
+#             # Create a new user document to be inserted into MongoDB
+#             if job_type == "Scholarship":
+#                 scholarship_hours = SEMESTER_SCHOLARSHIP_HOURS
+#                 new_user = {
+#                     'lastname': lastname,
+#                     'firstname': firstname,
+#                     'worker_type': worker_type,
+#                     'job_type': job_type,
+#                     'worker_id' : worker_id,
+#                     'hours' : scholarship_hours,
+#                     'email' : email,
+#                     'password' : encrypted_password,
+#                     'unavailability' : unavailability
+#                 }
+#             else:
+#                 new_user = {
+#                     'lastname': lastname,
+#                     'firstname': firstname,
+#                     'worker_type': worker_type,
+#                     'job_type': job_type,
+#                     'worker_id' : worker_id,
+#                     'hours' : work_study_hours,
+#                     'email' : email,
+#                     'password' : encrypted_password,
+#                     'unavailability' : unavailability
+#                 }
+
+#             # Insert the new user document into the MongoDB collection
+#             users_collection.insert_one(new_user)
+            
+#             # Return a success message as a JSON response
+#             return JsonResponse({"message": "User created successfully"})
+#         else:
+#             # If any required field is missing, return a bad request response
+#             return JsonResponse({"error": "Missing required fields"}, status=400)
+#     else:
+#         # If no user data is provided, return a bad request response
+#         return JsonResponse({"error": "No user data provided"}, status=400)    
+
 def create_user(request):
     # Extracting data from the request (assuming it's sent as JSON)
-    #user_data = request.POST.get('user_data')  # Assuming user_data is sent in the request
     user_data = json.loads(request.body.decode('utf-8'))
-    #print(user_data)
-
+    
     # Check if user_data is not None
     if user_data:
-        
         # Extracting user attributes from the user_data
         lastname = user_data.get('user_data', {}).get('lastname')
         firstname = user_data.get('user_data', {}).get('firstname')
         worker_type = user_data.get('user_data', {}).get('worker_type')
         job_type = user_data.get('user_data', {}).get('job_type')
         worker_id = user_data.get('user_data', {}).get('worker_id')
-        work_study_hours = user_data.get('user_data', {}).get('hours')
         email = user_data.get('user_data', {}).get('email')
         password = user_data.get('user_data', {}).get('password')
         encrypted_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         unavailability = {}
 
-        scholarship_hours = 0
-
         # Check if all required fields are provided
         if lastname and firstname and worker_type and job_type and worker_id and email and password:
-            # Create a new user document to be inserted into MongoDB
+            # Initialize scheduled hours based on job type
             if job_type == "Scholarship":
-                scholarship_hours = SEMESTER_SCHOLARSHIP_HOURS
-                new_user = {
-                    'lastname': lastname,
-                    'firstname': firstname,
-                    'worker_type': worker_type,
-                    'job_type': job_type,
-                    'worker_id' : worker_id,
-                    'hours' : scholarship_hours,
-                    'email' : email,
-                    'password' : encrypted_password,
-                    'unavailability' : unavailability
-                }
+                scheduled_hours = SEMESTER_SCHOLARSHIP_HOURS
             else:
-                new_user = {
-                    'lastname': lastname,
-                    'firstname': firstname,
-                    'worker_type': worker_type,
-                    'job_type': job_type,
-                    'worker_id' : worker_id,
-                    'hours' : work_study_hours,
-                    'email' : email,
-                    'password' : encrypted_password,
-                    'unavailability' : unavailability
-                }
+                scheduled_hours = user_data.get('user_data', {}).get('hours', 0)
+
+            # Create a new user document to be inserted into MongoDB
+            new_user = {
+                'lastname': lastname,
+                'firstname': firstname,
+                'worker_type': worker_type,
+                'job_type': job_type,
+                'worker_id' : worker_id,
+                'scheduled_hours': scheduled_hours,  # Track scheduled hours
+                #'worked_hours': 0,  # Initialize worked hours
+                'email' : email,
+                'password' : encrypted_password,
+                'unavailability' : unavailability
+            }
 
             # Insert the new user document into the MongoDB collection
             users_collection.insert_one(new_user)
@@ -115,7 +166,8 @@ def create_user(request):
             return JsonResponse({"error": "Missing required fields"}, status=400)
     else:
         # If no user data is provided, return a bad request response
-        return JsonResponse({"error": "No user data provided"}, status=400)    
+        return JsonResponse({"error": "No user data provided"}, status=400) 
+
 
 def delete_user(request):
     # Decode JSON data from the request body
@@ -139,11 +191,57 @@ def delete_user(request):
         # If no worker_id is provided in the request, return an error
         return JsonResponse({"error": "Worker ID not provided"}, status=400)
 
+# def random_scheduler_for_desk_assistant(): 
+#     print("DA")
+
+#     # Fetch all workers categorized as Desk assistant
+#     desk_assistants = users_collection.find({'job_type': 'Desk worker'})
+    
+#     big_schedule = {}
+
+#     # Iterate over each day of the week
+#     for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']:
+#         big_schedule[day] = {}
+        
+#         # Generate schedule for each time slot of the day
+#         start_time = datetime.strptime('08:30', '%H:%M')
+#         end_time = datetime.strptime('16:30', '%H:%M')
+#         current_time = start_time
+        
+#         while current_time < end_time:
+#             # Initialize list of available desk assistants for the current time slot
+#             available_desk_assistants = []
+            
+#             # Check availability of each desk assistant for the current time slot
+#             for desk_assistant in desk_assistants:
+#                 # Check if the desk assistant is available at the current time slot on the current day
+#                 if current_time.strftime('%H:%M') not in desk_assistant['unavailability'].get(day, []):
+#                     available_desk_assistants.append(desk_assistant['firstname'] + ' ' + desk_assistant['lastname'])
+                    
+#             # Randomly select a desk assistant from the available ones
+#             if available_desk_assistants:
+#                 selected_desk_assistant = random.choice(available_desk_assistants)
+#                 # Assign desk assistant to time slot
+#                 big_schedule[day][current_time.strftime('%H:%M')] = selected_desk_assistant
+#             else:
+#                 big_schedule[day][current_time.strftime('%H:%M')] = 'XXXXX'
+            
+#             # Move to the next time slot
+#             current_time += timedelta(hours=1)
+    
+#     big_schedule['release']['state'] = False
+#     #Empty the schedule colllection
+#     schedule.delete_many({})
+#     # Insert the new schedule into the schedule collection
+#     insertion_result = schedule.insert_one(big_schedule)
+#     if big_schedule and insertion_result:
+#         return JsonResponse({"message": "Schedule created successfully"})
+
 def random_scheduler_for_desk_assistant(): 
     print("DA")
 
     # Fetch all workers categorized as Desk assistant
-    desk_assistants = users_collection.find({'job_type': 'Mail Clerk'})
+    desk_assistants = users_collection.find({'job_type': 'Desk worker'})
     
     big_schedule = {}
 
@@ -160,30 +258,33 @@ def random_scheduler_for_desk_assistant():
             # Initialize list of available desk assistants for the current time slot
             available_desk_assistants = []
             
-            # Check availability of each desk assistant for the current time slot
+            # Check availability and remaining scheduled hours of each desk assistant for the current time slot
             for desk_assistant in desk_assistants:
                 # Check if the desk assistant is available at the current time slot on the current day
-                if current_time.strftime('%H:%M') not in desk_assistant['unavailability'].get(day, []):
-                    available_desk_assistants.append(desk_assistant['firstname'] + ' ' + desk_assistant['lastname'])
+                if current_time.strftime('%H:%M') not in desk_assistant['unavailability'].get(day, []) and desk_assistant['scheduled_hours'] > 0:
+                    available_desk_assistants.append(desk_assistant)
                     
             # Randomly select a desk assistant from the available ones
             if available_desk_assistants:
                 selected_desk_assistant = random.choice(available_desk_assistants)
                 # Assign desk assistant to time slot
-                big_schedule[day][current_time.strftime('%H:%M')] = selected_desk_assistant
+                big_schedule[day][current_time.strftime('%H:%M')] = selected_desk_assistant['firstname'] + ' ' + selected_desk_assistant['lastname']
+                # Deduct one hour from scheduled hours of the selected desk assistant
+                users_collection.update_one({'_id': selected_desk_assistant['_id']}, {"$inc": {'scheduled_hours': -1}})
             else:
                 big_schedule[day][current_time.strftime('%H:%M')] = 'XXXXX'
             
             # Move to the next time slot
             current_time += timedelta(hours=1)
     
-    big_schedule['release']['state'] = False
-    #Empty the schedule colllection
+    big_schedule['release'] = {'state': False}  # Add release key to indicate whether the schedule has been released
+    #Empty the schedule collection
     schedule.delete_many({})
     # Insert the new schedule into the schedule collection
     insertion_result = schedule.insert_one(big_schedule)
     if big_schedule and insertion_result:
         return JsonResponse({"message": "Schedule created successfully"})
+
         
 
 def release_schedule():
@@ -323,6 +424,62 @@ def return_workers_info():
 
 return_workers_info()
 
+
+def give_up_shift(request):
+    data = json.loads(request.body.decode('utf-8'))
+    worker_id = data.get('worker_id')
+    day = data.get('day')
+    time_slot = data.get('time_slot')
+
+    if worker_id and day and time_slot:
+        # Find the schedule document
+        schedule_document = schedule.find_one({})
+        
+        if schedule_document:
+            # Remove the worker from the specified time slot
+            schedule_document[day][time_slot] = 'XXXXX'
+            schedule.update_one({}, {"$set": schedule_document})
+            
+            # Increase the scheduled hours for the worker
+            users_collection.update_one({'worker_id': worker_id}, {"$inc": {'scheduled_hours': 1}})
+            
+            return JsonResponse({"message": "Shift given up successfully"})
+        else:
+            return JsonResponse({"error": "No schedule found"}, status=404)
+    else:
+        return JsonResponse({"error": "Worker ID, day, or time slot missing"}, status=400)
+
+def apply_for_shift(request):
+    data = json.loads(request.body.decode('utf-8'))
+    worker_id = data.get('worker_id')
+    day = data.get('day')
+    time_slot = data.get('time_slot')
+
+    if worker_id and day and time_slot:
+        # Find the schedule document
+        schedule_document = schedule.find_one({})
+        
+        if schedule_document:
+            # Check if the specified time slot is available
+            if schedule_document[day][time_slot] == 'XXXXX':
+                # Fetch the worker's full name
+                worker = users_collection.find_one({'worker_id': worker_id})
+                full_name = f"{worker.get('firstname')} {worker.get('lastname')}"
+                
+                # Assign the shift to the worker
+                schedule_document[day][time_slot] = full_name
+                schedule.update_one({}, {"$set": schedule_document})
+                
+                # Decrease the scheduled hours for the worker
+                users_collection.update_one({'worker_id': worker_id}, {"$inc": {'scheduled_hours': -1}})
+                
+                return JsonResponse({"message": "Shift applied successfully"})
+            else:
+                return JsonResponse({"error": "The specified time slot is not available"}, status=400)
+        else:
+            return JsonResponse({"error": "No schedule found"}, status=404)
+    else:
+        return JsonResponse({"error": "Worker ID, day, or time slot missing"}, status=400)
 
 
 # def update_hours():
