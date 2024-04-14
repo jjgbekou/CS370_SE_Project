@@ -301,15 +301,29 @@ def release_schedule():
         state = 'state'      # Replace 'state' with the actual key for state in your dictionary
         if release in big_schedule and state in big_schedule[release]:
             big_schedule[release][state] = True
-            
             # Update the document in the schedule collection
             schedule.update_one({}, {"$set": big_schedule})
-            schedule_to_be_returned = schedule.find_one({})
-            return JsonResponse({"message": "Schedule released successfully"}, schedule_to_be_returned)
+            # schedule_to_be_returned = schedule.find_one({})
+            return True
         else:
             print("Can't release schedule at the moment, release and state keys not found")
+            return False
     else:
         print("No schedule found in the schedule collection.")
+        return False
+
+
+def get_da_schedule():
+    release = 'release'  # Replace 'release' with the actual key for release in your dictionary
+    state = 'state'
+    the_schedule = schedule.find_one({})
+    if release in the_schedule and state in the_schedule[release]:
+        if the_schedule[release][state] == True:
+            schedule_to_be_returned = schedule.find_one({})
+            return JsonResponse({"message": "Schedule returned successfully"}, schedule_to_be_returned)
+        else:
+            return JsonResponse({"message": "Schedule not ready to be returned"})
+
 
 
 
@@ -419,10 +433,10 @@ def return_workers_info():
         }
         workers_info.append(worker_info)
     
-    #return JsonResponse({'workers':workers_info})
-    print(workers_info)
+    return JsonResponse({'workers':workers_info})
+    #print(workers_info)
 
-return_workers_info()
+#return_workers_info()
 
 
 def give_up_shift(request):
@@ -481,52 +495,5 @@ def apply_for_shift(request):
     else:
         return JsonResponse({"error": "Worker ID, day, or time slot missing"}, status=400)
 
-
-# def update_hours():
-#     print("This update hours")
-
-
 # def random_scheduler_for_mail_clerk():
 #     print("MC")W
-
-
-# def update_desk_assistant_schedule():
-#     print("New DA")
-
-
-# def update_mail_clerk_schedule():
-#     print("New MC")
-
-
-# def update_user(request):
-#     # Decode JSON data from request body
-#     data = json.loads(request.body.decode('utf-8'))
-
-#     # Extract the worker_id and other fields that could be updated
-#     worker_id = data.get('worker_id')
-#     updates = data.get('updates')  # Assuming updates are passed as a dictionary
-
-#     # Check if both worker_id and updates are provided
-#     if worker_id and updates:
-#         # If password is in updates, it needs to be encrypted before updating
-#         if 'password' in updates:
-#             password = updates['password']
-#             encrypted_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-#             updates['password'] = encrypted_password
-
-#         # Construct the query for MongoDB
-#         query = {'worker_id': worker_id}
-#         new_values = {'$set': updates}
-
-#         # Attempt to update the user in the database
-#         result = users_collection.update_one(query, new_values)
-
-#         # Check if the user document was found and updated
-#         if result.matched_count > 0:
-#             return JsonResponse({"message": "User updated successfully"})
-#         else:
-#             # If no user with the given worker_id was found
-#             return JsonResponse({"error": "User not found"}, status=404)
-#     else:
-#         # If worker_id or updates are missing from the request
-#         return JsonResponse({"error": "Worker ID or updates data missing"}, status=400)
