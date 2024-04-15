@@ -497,5 +497,41 @@ def apply_for_shift(request):
     else:
         return JsonResponse({"error": "Worker ID, day, or time slot missing"}, status=400)
 
-# def random_scheduler_for_mail_clerk():
-#     print("MC")W
+# def generate_mc_schedule():
+#     print("MC")
+#     # Fetch all workers categorized as Desk assistant
+#     mail_clerks = users_collection.find({'job_type': 'Mail Clerk'})
+    
+#     big_schedule = {}
+
+#     # Iterate over each day of the week
+#     for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']:
+#         big_schedule[day] = {}
+#         #8:30-5, 9-5:30
+#         # Generate schedule for each time slot of the day
+#         start_time = datetime.strptime('08:30', '%H:%M')
+#         end_time = datetime.strptime('16:30', '%H:%M')
+#         current_time = start_time
+        
+#         while current_time < end_time:
+#             # Initialize list of available desk assistants for the current time slot
+#             available_mail_clerks = []
+            
+#             # Check availability and remaining scheduled hours of each desk assistant for the current time slot
+#             for mail_clerk in mail_clerks:
+#                 # Check if the desk assistant is available at the current time slot on the current day
+#                 if current_time.strftime('%H:%M') not in mail_clerk['unavailability'].get(day, []) and mail_clerk['scheduled_hours'] > 0:
+#                     available_mail_clerks.append(mail_clerk)
+                    
+#             # Randomly select a desk assistant from the available ones
+#             if available_mail_clerks:
+#                 selected_mail_clerk = random.choice(available_mail_clerks)
+#                 # Assign desk assistant to time slot
+#                 big_schedule[day][current_time.strftime('%H:%M')] = selected_mail_clerk['firstname'] + ' ' + selected_mail_clerk['lastname']
+#                 # Deduct one hour from scheduled hours of the selected desk assistant
+#                 users_collection.update_one({'_id': selected_mail_clerk['_id']}, {"$inc": {'scheduled_hours': -1}})
+#             else:
+#                 big_schedule[day][current_time.strftime('%H:%M')] = None
+            
+#             # Move to the next time slot
+#             current_time += timedelta(hours=1)
