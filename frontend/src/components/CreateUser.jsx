@@ -21,7 +21,7 @@ export function CreateUser() {
     async function handleSubmit(e) {
         e.preventDefault()
         let userCopy = user
-        userCopy.hours = int(user.hours)
+        userCopy.hours = parseInt(user.hours)
         try {
           const response = await createUser(userCopy)
           console.log(response.data); 

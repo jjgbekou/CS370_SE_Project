@@ -272,7 +272,7 @@ def generate_da_schedule(request):
                 # Deduct one hour from scheduled hours of the selected desk assistant
                 users_collection.update_one({'_id': selected_desk_assistant['_id']}, {"$inc": {'scheduled_hours': -1}})
             else:
-                big_schedule[day][current_time.strftime('%H:%M')] = 'XXXXX'
+                big_schedule[day][current_time.strftime('%H:%M')] = None
             
             # Move to the next time slot
             current_time += timedelta(hours=1)
@@ -304,13 +304,13 @@ def release_schedule(request):
             # Update the document in the schedule collection
             schedule.update_one({}, {"$set": big_schedule})
             # schedule_to_be_returned = schedule.find_one({})
-            return True
+            return JsonResponse({"success": True})
         else:
             print("Can't release schedule at the moment, release and state keys not found")
-            return False
+            return JsonResponse({"success": False})
     else:
         print("No schedule found in the schedule collection.")
-        return False
+        return JsonResponse({"success": False})
 
 
 def get_da_schedule(request):

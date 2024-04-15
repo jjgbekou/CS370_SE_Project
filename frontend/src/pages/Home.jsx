@@ -18,21 +18,26 @@ export function Home() {
         },
       })
 
-      const [test, setTest] = useState({})
+      const [realSchedule, setRealSchedule] = useState({})
 
     useEffect(() => {
       async function loadSchedule() {
         let data = await getDaSchedule()
         console.log(data)
-        setTest(data)
+        setRealSchedule(data.data.schedule)
       }
       loadSchedule()
     }, [])
 
     return (
+      <>
+      
         <div className="flex w-full justify-center">
-            <BigSchedule schedule={schedule}/>
+            <BigSchedule schedule={realSchedule}/>
             
         </div>
+        
+
+      </>
     )
 }
