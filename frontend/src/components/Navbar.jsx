@@ -18,6 +18,10 @@ export function Navbar() {
             path: '/availability'
         },
         {
+            name: "Desk Availability",
+            path: '/da_availability'
+        },
+        {
             name: "My Schedule",
             path: `/myschedule`
         }

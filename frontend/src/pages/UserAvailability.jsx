@@ -41,7 +41,6 @@ const calculateTime = (slotIndex) => {
   return `${slotHour}:${slotMinute < 10 ? '0' : ''}${slotMinute}`; // Format the time
 };
 
-
   async function handleSubmit() {
     let user = JSON.parse(sessionStorage.getItem("User"))
     let user_id = user.userId
