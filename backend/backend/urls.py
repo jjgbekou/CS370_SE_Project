@@ -27,8 +27,9 @@ urlpatterns = [
        path('get_scholarship_hours/', views.get_scholarship_hours, name='get_scholarship_hours'),
        path('update_unavailability/', views.update_unavailability, name='update_unavailability'),
        path('get_da_schedule/', views.get_da_schedule, name='get_da_schedule'),
-       path('release_schedule/', views.release_schedule, name='release_schedule')
-
+       path('release_schedule/', views.release_schedule, name='release_schedule'),
+       path('give_up_shift/', views.give_up_shift, name= 'give_up_shift'),
+       path('apply_for_shift/', views.apply_for_shift, name= 'apply_for_shift')
     #path('get_user/<int:user_id>/', views.get_user, name='get_user'), 
     #path('get_all_users/', views.get_all_users, name='get_all_users'),
 
