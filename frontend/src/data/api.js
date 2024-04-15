@@ -71,17 +71,18 @@ export async function deleteUser(userId) {
     }
 }
 
-export async function generateSchedule() {
+export async function generateDaSchedule() {
     try {
-        let data = axios.put()
+        let data = axios.post(`${BASE_URL}/generate_da_schedule/`)
+        return data
     } catch(error) {
         console.log(`Schedule could not be generated: ${error}`)
     }
 }
 
-export async function getSchedule() {
+export async function getDaSchedule() {
     try {
-        let data = axios.get(`${BASE_URL}/get_schedule/`)
+        let data = await axios.get(`${BASE_URL}/get_da_schedule/`)
         return data
     } catch(error) {
         console.log(`Schedule could not be retrieved: ${error}`)

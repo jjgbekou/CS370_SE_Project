@@ -6,7 +6,7 @@ import { Profile } from './pages/Profile'
 import { UserAvailability } from './pages/UserAvailability'
 import { UserList } from './pages/UserList'
 import { Manager } from './pages/Manager'
-import { MySchedule } from './pages/MySchedule'
+import { MySchedule } from './components/MySchedule'
 import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import React from 'react'
 import './App.css'
@@ -22,7 +22,7 @@ function App() {
           <Route path="/availability" element={<UserAvailability/>}/>
           <Route path="/userlist" element={<UserList/>}/>
           <Route path="/manager" element={<Manager/>}/>
-          <Route path="/myschedule/:id" element={<MySchedule/>}/>
+          <Route path="/myschedule" element={<Profile/>}/>
         </Route>
       </Routes>
     </Router>

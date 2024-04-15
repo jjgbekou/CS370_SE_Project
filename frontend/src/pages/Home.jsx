@@ -1,5 +1,6 @@
 import { BigSchedule } from "../components/BigSchedule"
 import { useEffect, useState } from "react"
+import { generateDaSchedule, getDaSchedule } from "../data/api"
 
 export function Home() {
 
@@ -17,13 +18,21 @@ export function Home() {
         },
       })
 
-    useEffect(() => {
+      const [test, setTest] = useState({})
 
+    useEffect(() => {
+      async function loadSchedule() {
+        let data = await getDaSchedule()
+        console.log(data)
+        setTest(data)
+      }
+      loadSchedule()
     }, [])
 
     return (
         <div className="flex w-full justify-center">
             <BigSchedule schedule={schedule}/>
+            
         </div>
     )
 }

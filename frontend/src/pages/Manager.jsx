@@ -1,10 +1,10 @@
-import { generateSchedule } from "../data/api"
+import { generateDaSchedule } from "../data/api"
 import { releaseSchedule } from "../data/api"
 
 export function Manager() {
 
     async function genSchedule() {
-        await generateSchedule()
+        await generateDaSchedule()
     }
 
     async function relSchedule() {

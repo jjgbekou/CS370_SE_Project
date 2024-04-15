@@ -22,10 +22,12 @@ urlpatterns = [
        path('create_user/', views.create_user, name='create_user'),
        path('login/', views.login, name='login'),
        path('delete_user/', views.delete_user, name='delete_user'),
-       path('random_scheduler_for_desk_assistant/', views.random_scheduler_for_desk_assistant, name='random_scheduler_for_desk_assistant'),
+       path('generate_da_schedule/', views.generate_da_schedule, name='random_scheduler_for_desk_assistant'),
        path('return_workers_info/', views.return_workers_info, name='return_workers_info'),
        path('get_scholarship_hours/', views.get_scholarship_hours, name='get_scholarship_hours'),
-       path('update_unavailability/', views.update_unavailability, name='update_unavailability')
+       path('update_unavailability/', views.update_unavailability, name='update_unavailability'),
+       path('get_da_schedule/', views.get_da_schedule, name='get_da_schedule'),
+       path('release_schedule/', views.release_schedule, name='release_schedule')
 
     #path('get_user/<int:user_id>/', views.get_user, name='get_user'), 
     #path('get_all_users/', views.get_all_users, name='get_all_users'),

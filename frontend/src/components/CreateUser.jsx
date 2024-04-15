@@ -20,8 +20,10 @@ export function CreateUser() {
 
     async function handleSubmit(e) {
         e.preventDefault()
+        let userCopy = user
+        userCopy.hours = int(user.hours)
         try {
-          const response = await createUser(user)
+          const response = await createUser(userCopy)
           console.log(response.data); 
         } catch (error) {
           alert('Error creating user:', error);

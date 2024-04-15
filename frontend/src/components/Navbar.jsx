@@ -19,7 +19,7 @@ export function Navbar() {
         },
         {
             name: "My Schedule",
-            path: `/myschedule/${userId}`
+            path: `/myschedule`
         }
     ]
     

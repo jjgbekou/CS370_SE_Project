@@ -237,7 +237,7 @@ def delete_user(request):
 #     if big_schedule and insertion_result:
 #         return JsonResponse({"message": "Schedule created successfully"})
 
-def generate_da_schedule(): 
+def generate_da_schedule(request): 
     print("DA")
 
     # Fetch all workers categorized as Desk assistant
@@ -287,7 +287,7 @@ def generate_da_schedule():
 
         
 
-def release_schedule():
+def release_schedule(request):
     # Find the document in the schedule collection
     schedule_document = schedule.find_one({})
     
@@ -313,14 +313,16 @@ def release_schedule():
         return False
 
 
-def get_da_schedule():
+def get_da_schedule(request):
     release = 'release'  # Replace 'release' with the actual key for release in your dictionary
     state = 'state'
     the_schedule = schedule.find_one({})
+    # Convert ObjectId to string
+    the_schedule['_id'] = str(the_schedule['_id'])
     if release in the_schedule and state in the_schedule[release]:
         if the_schedule[release][state] == True:
-            schedule_to_be_returned = schedule.find_one({})
-            return JsonResponse({"message": "Schedule returned successfully"}, schedule_to_be_returned)
+            #schedule_to_be_returned = schedule.find_one({})
+            return JsonResponse({"message": "Schedule returned successfully", "schedule": the_schedule})
         else:
             return JsonResponse({"message": "Schedule not ready to be returned"})
 
