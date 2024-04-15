@@ -237,7 +237,7 @@ def delete_user(request):
 #     if big_schedule and insertion_result:
 #         return JsonResponse({"message": "Schedule created successfully"})
 
-def generate_da_schedule(request): 
+def generate_da_schedule(): 
     print("DA")
 
     # Fetch all workers categorized as Desk assistant
@@ -275,7 +275,9 @@ def generate_da_schedule(request):
                 big_schedule[day][current_time.strftime('%H:%M')] = None
             
             # Move to the next time slot
-            current_time += timedelta(hours=1)
+            current_time += timedelta(minutes=30)
+            #print(current_time)
+
     
     big_schedule['release'] = {'state': False}  # Add release key to indicate whether the schedule has been released
     #Empty the schedule collection
@@ -285,7 +287,8 @@ def generate_da_schedule(request):
     if big_schedule and insertion_result:
         return JsonResponse({"message": "Schedule created successfully"})
 
-        
+#generate_da_schedule()
+   
 
 def release_schedule(request):
     # Find the document in the schedule collection
