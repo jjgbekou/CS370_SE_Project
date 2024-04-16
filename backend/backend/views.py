@@ -272,11 +272,11 @@ def generate_da_schedule():
                 # Deduct one hour from scheduled hours of the selected desk assistant
                 users_collection.update_one({'_id': selected_desk_assistant['_id']}, {"$inc": {'scheduled_hours': -1}})
             else:
-                big_schedule[day][current_time.strftime('%H:%M')] = None
+                big_schedule[day][current_time.strftime('%H:%M')] = "XXXXX"
             
             # Move to the next time slot
             current_time += timedelta(minutes=30)
-            #print(current_time)
+            #print(day)
 
     
     big_schedule['release'] = {'state': False}  # Add release key to indicate whether the schedule has been released
