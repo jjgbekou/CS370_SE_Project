@@ -17,7 +17,7 @@ users_collection = db['user']
 schedule = db['schedule']
 managers_collection = db['manager']
 
-SEMESTER_SCHOLARSHIP_HOURS = 0
+SEMESTER_SCHOLARSHIP_HOURS = 51
 
 def create_manager(request):
     #Create a manager
