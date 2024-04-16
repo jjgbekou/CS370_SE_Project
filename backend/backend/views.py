@@ -17,7 +17,7 @@ users_collection = db['user']
 schedule = db['schedule']
 managers_collection = db['manager']
 
-SEMESTER_SCHOLARSHIP_HOURS = 0
+SEMESTER_SCHOLARSHIP_HOURS = 51
 
 def create_manager(request):
     #Create a manager
@@ -291,7 +291,7 @@ def generate_da_schedule(request):
                 # Deduct one hour from scheduled hours of the selected desk assistant
                 #users_collection.update_one({'_id': selected_desk_assistant['_id']}, {"$inc": {'scheduled_hours': -1}})
             else:
-                big_schedule[day][current_time.strftime('%H:%M')] = None
+                big_schedule[day][current_time.strftime('%H:%M')] = "XXXXX"
             
             # Move to the next time slot
             current_time += timedelta(hours=1)
