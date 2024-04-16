@@ -2,46 +2,42 @@ import { getDaSchedule } from "../data/api"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import moment from "moment/moment";
+import { Loading } from "./Loading";
 
 export function MySchedule() {
 
   const [schedule, setSchedule] = useState({})
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function loadSchedule() {
       let data = await getDaSchedule()
-      setSchedule(data)
-      return data
+      console.log(data)
+      setSchedule(data.data.schedule)
+      setLoading(false)
     }
     loadSchedule()
-  })
+  }, [])
 
-  // Function to generate time slots from 8:30am to 5:30pm
-  const generateTimeSlots = () => {
-    const timeSlots = [];
-    let hour = 8;
-    let minute = 30;
-    for (let i = 0; i < 18; i++) { // 18 slots from 8:30 to 17:30
-      const time = `${hour}:${minute < 10 ? '0' : ''}${minute}`;
-      timeSlots.push(time);
-      minute += 30;
-      if (minute >= 60) {
-        hour++;
-        minute = 0;
-      }
-    }
-    return timeSlots;
-  };
+ // Function to generate time slots from 8:30am to 5:30pm in hour-long increments
+const generateTimeSlots = () => {
+  const timeSlots = [];
+  let hour = 8;
+  let minute = 30;
+  for (let i = 0; i < 8; i++) { // 9 slots from 8:30 to 16:30
+    const time = `${hour < 10 ? "0" : ""}${hour}:${minute < 10 ? '0' : ''}${minute}`;
+    timeSlots.push(time);
+    hour++;
+  }
+  return timeSlots;
+};
 
-  // Function to generate an array of 7 consecutive dates starting from Sunday
-  const generateDates = () => {
-    const dates = [];
-    const today = moment().startOf('week'); // Start from Sunday of the current week
-    for (let i = 0; i < 7; i++) {
-      const date = today.clone().add(i, 'days');
-      dates.push(date.format('M/D')); // Format: Month/Day
-    }
-    return dates;
+   // Function to generate an array of 7 consecutive days of the week starting from Sunday
+   const generateDates = () => {
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const todayIndex = moment().day(); // Get the index of the current day of the week (0 for Sunday, 1 for Monday, etc.)
+    const rotatedDays = [...daysOfWeek.slice(todayIndex), ...daysOfWeek.slice(0, todayIndex)]; // Rotate the array so that it starts from Sunday
+    return rotatedDays;
   };
 
   // Function to render schedule blocks for each time slot for all 7 days
@@ -51,6 +47,9 @@ export function MySchedule() {
     days.forEach(day => {
       userSchedule[day] = {};
       generateTimeSlots().forEach(slot => {
+        console.log(schedule)
+        console.log(schedule[day])
+        console.log(schedule[day][slot])
         userSchedule[day][slot] = schedule[day] && schedule[day][slot] ? schedule[day][slot] : '';
       });
     });
@@ -68,6 +67,8 @@ export function MySchedule() {
   };
 
   return (
+    <>
+    {!loading ?
     <div className="user-schedule">
       <table className="table-auto w-full mt-24">
         <thead>
@@ -82,6 +83,8 @@ export function MySchedule() {
           {renderScheduleRows()}
         </tbody>
       </table>
-    </div>
+    </div> :
+    <Loading/>}
+    </>
   );
 };

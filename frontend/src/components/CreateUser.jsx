@@ -1,7 +1,7 @@
 import { createUser } from "../data/api"
 import { useState } from "react"
 
-export function CreateUser() {
+export function CreateUser( {setMode} ) {
 
     const [user, setUser] = useState({
         firstname: '',
@@ -22,12 +22,9 @@ export function CreateUser() {
         e.preventDefault()
         let userCopy = user
         userCopy.hours = parseInt(user.hours)
-        try {
-          const response = await createUser(userCopy)
-          console.log(response.data); 
-        } catch (error) {
-          alert('Error creating user:', error);
-        }
+        const response = await createUser(userCopy)
+        console.log(response.data); 
+        setMode(true)
       };
 
     return (

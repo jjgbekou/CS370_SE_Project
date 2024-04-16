@@ -10,15 +10,15 @@ export function Landing() {
     return (
         <div className="flex content-center justify-items-center justify-center w-screen">
             {mode ? 
-            <>
+            <div className="flex flex-col w-72">
                 <Login/>
-                <span onClick={() => setMode(false)} className="cursor-pointer text-sm my-7">Create New User</span>
-            </>
+                <span onClick={() => setMode(false)} className="flex cursor-pointer rounded-md p-1 justify-center bg-truman-purple text-sm mt-2">Create New User</span>
+            </div>
             :
-            <>
-                <CreateUser/>
-                <span onClick={() => setMode(true)} className="cursor-pointer text-sm my-7">Login Existing Account</span>
-            </>}
+            <div>
+                <CreateUser setMode={setMode}/>
+                <span onClick={() => setMode(true)} className="flex cursor-pointer rounded-md p-1 justify-center bg-truman-purple text-sm mt-2">Login Existing Account</span>
+            </div>}
         </div>
     )
 }

@@ -49,7 +49,7 @@ export function UserList() {
         <>
         {!loading ?
         
-        <div className="flex justify-center items-center w-full">
+        <div className="flex justify-center items-center w-full mt-32">
             {userView 
             ?
             <div className="flex justify-center w-1/2">  
