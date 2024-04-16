@@ -49,7 +49,7 @@ export function DeskAvailability() {
     <>
       {userView ? (
         <div className="availability-picker">
-          <table className="table-auto border border-gray-500">
+          <table className="table-auto border border-gray-500 mt-20">
             <thead>
               <tr>
                 <th className="px-4 py-2 border border-gray-500"></th>

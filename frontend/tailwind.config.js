@@ -7,7 +7,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        'truman-purple': '#510C76'
+        'truman-purple': '#510C76',
+        'truman-blue' : '#00aae2',
+        'truman-brown' : '#887722'
       }
     },
   },

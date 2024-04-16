@@ -34,7 +34,7 @@ const generateTimeSlots = () => {
           const person = schedule[day] && schedule[day][slot];
           return (
             <td key={`${day}-${slot}`} className="border border-gray-200 px-4 py-2">
-              {person && <div className="bg-blue-100 text-blue-800 rounded-lg p-2">{person}</div>}
+              {person && <div className="bg-blue-100 rounded-lg p-2 text-black">{person}</div>}
             </td>
           );
         })}
@@ -43,13 +43,13 @@ const generateTimeSlots = () => {
   };
 
   return (
-    <div className="hourly-schedule-calendar mt-24">
-      <table className="table-auto w-full">
+    <div className="hourly-schedule-calendar mt-28">
+      <table className="table-auto w-full rounded-lg">
         <thead>
           <tr className="bg-gray-100">
-            <th className="border border-gray-200 px-4 py-2 text-black">Time Slot</th>
+            <th className="border border-gray-200 px-4 py-2 bg-truman-blue">Time Slot</th>
             {generateDates().map((day, index) => (
-              <th key={index} className="border border-gray-200 px-4 py-2 text-black">{day}</th>
+              <th key={index} className="border border-gray-200 px-4 py-2 bg-truman-blue">{day}</th>
             ))}
           </tr>
         </thead>

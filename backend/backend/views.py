@@ -171,7 +171,9 @@ def create_user(request):
 
 def delete_user(request):
     # Decode JSON data from the request body
+    print(request.body)
     student = json.loads(request.body.decode('utf-8'))
+    print(student)
     
     # Extract the worker_id of the user to be deleted
     worker_id = student.get('worker_id')
@@ -446,7 +448,7 @@ def get_scholarship_hours(request):
     return JsonResponse({"message": "Input successful"})
 
 
-def return_workers_info():
+def return_workers_info(request):
     #Fetch all workers fro the database
     all_workers = list(users_collection.find())
     

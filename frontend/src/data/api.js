@@ -64,7 +64,7 @@ export async function updateUser(userId, userObject) {
 
 export async function deleteUser(userId) {
     try {
-        let data = axios.delete(`${BASE_URL}/delete_user/${userId}`)
+        let data = axios.post(`${BASE_URL}/delete_user/`, {worker_id: userId})
         return data
     } catch(error) {
         console.log(`Error occured during deletion: ${error}`)
