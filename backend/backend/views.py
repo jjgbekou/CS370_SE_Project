@@ -138,7 +138,9 @@ def create_user(request):
         if lastname and firstname and worker_type and job_type and worker_id and email and password:
             # Initialize scheduled hours based on job type
             if job_type == "Scholarship":
-                scheduled_hours = SEMESTER_SCHOLARSHIP_HOURS
+                scholarship_hours = managers_collection.find_one({})
+                print(scholarship_hours)
+                scheduled_hours = scholarship_hours
             else:
                 scheduled_hours = user_data.get('user_data', {}).get('hours', 0)
 
@@ -442,10 +444,15 @@ def login(request):
 
 def get_scholarship_hours(request):
     hours = json.loads(request.body.decode('utf-8'))
-    SEMESTER_SCHOLARSHIP_HOURS = hours
+    semester_scholarship_hours = 0
+    semester_scholarship_hours = hours
     # da_scholarship_workers = users_collection.find({'worker_type': 'Scholarship'})
     # for da_scholarship
-    return JsonResponse({"message": "Input successful"})
+    insertion_result = managers_collection.insert_one({"scholarship_hours": semester_scholarship_hours})
+    if insertion_result:
+        return JsonResponse({"message": "Input successful"})
+    else:
+        return JsonResponse({"message": "Input not succesful"})
 
 
 def return_workers_info(request):
