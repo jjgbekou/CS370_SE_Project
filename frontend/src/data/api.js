@@ -106,3 +106,11 @@ export async function updateSchedule(scheduleId) {
         console.log(`Error while updating schedule: ${error}`)
     }
 }
+
+export async function inputScholarshipHours(hours) {
+    try {
+        let data = axios.put(`${BASE_URL}/get_scholarship_hours/`, hours)
+    } catch(error) {
+        console.log(`Error while inputting scholarship hours: ${error}`)
+    }
+}

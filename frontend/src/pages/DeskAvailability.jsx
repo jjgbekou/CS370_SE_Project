@@ -34,7 +34,7 @@ export function DeskAvailability() {
   const calculateTime = (hourIndex) => {
     const startHour = 8;
     const slotHour = startHour + hourIndex;
-    return `${slotHour}:30`; // Format the time
+    return `${slotHour < 10 ? "0" : ""}${slotHour}:30`; // Format the time
   };
 
   async function handleSubmit() {

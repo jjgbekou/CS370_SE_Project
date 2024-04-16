@@ -28,7 +28,7 @@ export function Navbar() {
     ]
     
     return (
-        <nav className="bg-truman-purple border-gray-200 bg-gray-900 w-screen fixed top-0 left-0">
+        <nav className="bg-blue-900 border-gray-200 bg-gray-900 w-screen fixed top-0 left-0">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <Link to="/home" className="flex items-center w-24 space-x-3 rtl:space-x-reverse">
                 <img src={logo} className="h-8" alt="Flowbite Logo" />

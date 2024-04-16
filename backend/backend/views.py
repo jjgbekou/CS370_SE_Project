@@ -237,12 +237,16 @@ def delete_user(request):
 #     if big_schedule and insertion_result:
 #         return JsonResponse({"message": "Schedule created successfully"})
 
-def generate_da_schedule(): 
+def generate_da_schedule(request): 
     print("DA")
 
     # Fetch all workers categorized as Desk assistant
-    desk_assistants = users_collection.find({'job_type': 'Desk worker'})
-    
+    desk_assistants_query = users_collection.find({'job_type': 'Desk worker'})
+
+    # Iterate over the cursor and print each document
+    #for assistant in desk_assistants:
+        #print(assistant)
+
     big_schedule = {}
 
     # Iterate over each day of the week
@@ -255,28 +259,43 @@ def generate_da_schedule():
         current_time = start_time
         
         while current_time < end_time:
+            desk_assistants = desk_assistants_query.clone()
+
             # Initialize list of available desk assistants for the current time slot
             available_desk_assistants = []
-            
+
             # Check availability and remaining scheduled hours of each desk assistant for the current time slot
+            #print(desk_assistants)
             for desk_assistant in desk_assistants:
+                
+              
+                #print("Checking availability for:", desk_assistant['firstname'], desk_assistant['lastname'], "at", current_time.strftime('%H:%M'), "on", day)
                 # Check if the desk assistant is available at the current time slot on the current day
                 if current_time.strftime('%H:%M') not in desk_assistant['unavailability'].get(day, []) and desk_assistant['scheduled_hours'] > 0:
+                    #print("Available:", desk_assistant['firstname'], desk_assistant['lastname'])
                     available_desk_assistants.append(desk_assistant)
-                    
+                else:
+                    pass
+                    #print("Not available:", desk_assistant['firstname'], desk_assistant['lastname'])
+
+            # Print available desk assistants
+            #print("Available desk assistants:", available_desk_assistants)
+
+              
             # Randomly select a desk assistant from the available ones
             if available_desk_assistants:
+                #print("Inside second if")
                 selected_desk_assistant = random.choice(available_desk_assistants)
                 # Assign desk assistant to time slot
                 big_schedule[day][current_time.strftime('%H:%M')] = selected_desk_assistant['firstname'] + ' ' + selected_desk_assistant['lastname']
                 # Deduct one hour from scheduled hours of the selected desk assistant
-                users_collection.update_one({'_id': selected_desk_assistant['_id']}, {"$inc": {'scheduled_hours': -1}})
+                #users_collection.update_one({'_id': selected_desk_assistant['_id']}, {"$inc": {'scheduled_hours': -1}})
             else:
                 big_schedule[day][current_time.strftime('%H:%M')] = None
             
             # Move to the next time slot
-            current_time += timedelta(minutes=30)
-            #print(current_time)
+            current_time += timedelta(hours=1)
+            print(current_time)
 
     
     big_schedule['release'] = {'state': False}  # Add release key to indicate whether the schedule has been released
@@ -422,6 +441,7 @@ def login(request):
 def get_scholarship_hours(request):
     hours = json.loads(request.body.decode('utf-8'))
     SEMESTER_SCHOLARSHIP_HOURS = hours
+    return JsonResponse({"message": "Input successful"})
 
 
 def return_workers_info():
@@ -456,7 +476,7 @@ def give_up_shift(request):
         
         if schedule_document:
             # Remove the worker from the specified time slot
-            schedule_document[day][time_slot] = 'XXXXX'
+            schedule_document[day][time_slot] = None
             schedule.update_one({}, {"$set": schedule_document})
             
             # Increase the scheduled hours for the worker
@@ -480,7 +500,7 @@ def apply_for_shift(request):
         
         if schedule_document:
             # Check if the specified time slot is available
-            if schedule_document[day][time_slot] == 'XXXXX':
+            if schedule_document[day][time_slot] == None:
                 # Fetch the worker's full name
                 worker = users_collection.find_one({'worker_id': worker_id})
                 full_name = f"{worker.get('firstname')} {worker.get('lastname')}"

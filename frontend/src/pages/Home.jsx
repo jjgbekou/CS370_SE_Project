@@ -1,6 +1,7 @@
 import { BigSchedule } from "../components/BigSchedule"
 import { useEffect, useState } from "react"
 import { generateDaSchedule, getDaSchedule } from "../data/api"
+import { DaSchedule } from "../components/DaSchedule"
 
 export function Home() {
 
@@ -33,7 +34,7 @@ export function Home() {
       <>
       
         <div className="flex w-full justify-center">
-            <BigSchedule schedule={realSchedule}/>
+            <DaSchedule schedule={realSchedule}/>
             
         </div>
         
