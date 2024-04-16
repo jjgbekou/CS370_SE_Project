@@ -441,6 +441,8 @@ def login(request):
 def get_scholarship_hours(request):
     hours = json.loads(request.body.decode('utf-8'))
     SEMESTER_SCHOLARSHIP_HOURS = hours
+    # da_scholarship_workers = users_collection.find({'worker_type': 'Scholarship'})
+    # for da_scholarship
     return JsonResponse({"message": "Input successful"})
 
 
@@ -454,7 +456,10 @@ def return_workers_info():
             'worker_id' : worker.get('worker_id'),
             'firstname' : worker.get('firstname'),
             'lastname' : worker.get('lastname'),
-            'unavailability' : worker.get('unavailability')
+            'email' : worker.get('email'),
+            'worker_type' : worker.get('worker_type'),
+            'job_type' : worker.get('job_type')
+            #'unavailability' : worker.get('unavailability')
         }
         workers_info.append(worker_info)
     
