@@ -237,7 +237,7 @@ def delete_user(request):
 #     if big_schedule and insertion_result:
 #         return JsonResponse({"message": "Schedule created successfully"})
 
-def generate_da_schedule(): 
+def generate_da_schedule(request): 
     print("DA")
 
     # Fetch all workers categorized as Desk assistant
