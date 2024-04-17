@@ -53,7 +53,7 @@ export function DeskAvailability() {
             <thead>
               <tr>
                 <th className="px-4 py-2 border border-gray-500"></th>
-                {[...Array(9)].map((_, i) => (
+                {[...Array(8)].map((_, i) => (
                   <th
                     key={i}
                     className="px-4 py-2 text-center border border-gray-500"
@@ -69,7 +69,7 @@ export function DeskAvailability() {
                   <td className="px-4 py-2 font-semibold border border-gray-500">
                     {day}
                   </td>
-                  {[...Array(9)].map((_, hourIndex) => (
+                  {[...Array(8)].map((_, hourIndex) => (
                     <td
                       key={hourIndex}
                       className={`px-4 py-2 text-center cursor-pointer border border-gray-500 ${
@@ -88,7 +88,7 @@ export function DeskAvailability() {
             className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleSubmit}
           >
-            Submit Availability
+            Submit Unvailability
           </button>
         </div>
       ) : (
