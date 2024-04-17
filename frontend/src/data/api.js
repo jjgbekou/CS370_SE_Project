@@ -48,14 +48,15 @@ export async function getAllUsers() {
 }
 
 export async function createUser(userObject) {
+    let data
     try {
-        let data = await axios.post(`${BASE_URL}/create_user/`, {user_data: userObject})
+        data = await axios.post(`${BASE_URL}/create_user/`, {user_data: userObject})
         console.log(data)
     } catch(error) {
         console.log(`Error occured during creation: ${error}`)
+    } finally {
+        return data
     }
-    
-    return data
 }
 
 export async function updateUser(userId, userObject) {

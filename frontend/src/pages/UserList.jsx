@@ -5,6 +5,7 @@ import { Loading } from "../components/Loading";
 
 export function UserList() {
 
+    const [isOpen, setIsOpen] = useState(false)
     const [users, setUsers] = useState([
         {
           name: 'John Doe',
@@ -27,6 +28,14 @@ export function UserList() {
       ]);
 
     const [loading, setLoading] = useState(true)
+
+    function closeModal() {
+        setIsOpen(false)
+      }
+    
+      function openModal() {
+        setIsOpen(true)
+      }
 
     let user = JSON.parse(sessionStorage.getItem("User"))
     let userView = user.view == "Manager"
@@ -72,7 +81,7 @@ export function UserList() {
                         <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{user.job_type}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{user.worker_type}</td>
-                        <td onClick={() => handleDelete(user)} className="cursor-pointer">Remove</td>
+                        <td onClick={openModal} className="cursor-pointer">Remove</td>
                     </tr>
                     ))}
                 </tbody>

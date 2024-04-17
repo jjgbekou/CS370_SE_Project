@@ -1,8 +1,10 @@
 import { createUser } from "../data/api"
 import { useState } from "react"
+import { AlertModal } from "./AlertModal";
 
 export function CreateUser( {setMode} ) {
 
+    const [isOpen, setIsOpen] = useState(false)
     const [user, setUser] = useState({
         firstname: '',
         lastname: '',
@@ -20,12 +22,24 @@ export function CreateUser( {setMode} ) {
 
     async function handleSubmit(e) {
         e.preventDefault()
+        
         let userCopy = user
         userCopy.hours = parseInt(user.hours)
         const response = await createUser(userCopy)
-        console.log(response.data); 
-        setMode(true)
+        if (response.status == 200) {
+          openModal()
+        } else {
+          alert("User account could not be created. Please try again.")
+        }
       };
+    
+      function openModal() {
+        setIsOpen(true)
+      }
+
+      function redirect() {
+        setMode(true)
+      }
 
     return (
         <>
@@ -50,6 +64,7 @@ export function CreateUser( {setMode} ) {
             <input type="password" name="password" placeholder="Password" value={user.password} onChange={handleChange} className="m-2 p-2 rounded-md" required />
             <button type="submit" className="m-2 border-solid border-2 rounded-md border-white bg-truman-purple">Create User</button>
           </form>
+          {isOpen && <AlertModal isOpen={isOpen} setIsOpen={setIsOpen} title={"User Creation Successful"} message={"User account has been created successfully. Return to the login page?"} button={"Confirm"} doneFunction={redirect}/>}
         </>
     )
     }
