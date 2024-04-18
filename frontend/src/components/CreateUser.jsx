@@ -9,7 +9,6 @@ export function CreateUser( {setMode} ) {
         firstname: '',
         lastname: '',
         worker_id: '',
-        job_type: '',
         worker_type: '',
         email: '',
         password: '',
@@ -55,11 +54,6 @@ export function CreateUser( {setMode} ) {
             {user.worker_type === 'Work-Study' && ( // Show hours field only if worker type is 'Work-Study'
               <input type="number" name="hours" placeholder="Number of Hours" value={user.hours} onChange={handleChange} required />
             )}
-            <select name="job_type" value={user.job_type} onChange={handleChange} className="m-2 p-2 rounded-md" required>
-              <option value="">Select Job Type</option>
-              <option value="Desk worker">Desk Worker</option>
-              <option value="Mail Clerk">Mail Clerk</option>
-            </select>
             <input type="email" name="email" placeholder="Email" value={user.email} onChange={handleChange} className="m-2 p-2 rounded-md" required />
             <input type="password" name="password" placeholder="Password" value={user.password} onChange={handleChange} className="m-2 p-2 rounded-md" required />
             <button type="submit" className="m-2 border-solid border-2 rounded-md border-white bg-truman-purple">Create User</button>
