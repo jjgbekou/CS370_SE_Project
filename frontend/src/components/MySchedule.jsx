@@ -57,11 +57,13 @@ const generateTimeSlots = () => {
     return generateTimeSlots().map(slot => (
       <tr key={slot} className="border border-gray-200">
         <td className="border border-gray-200 px-4 py-2">{slot}</td>
-        {days.map((day, index) => (
+        {days.map((day, index) => {
+          const person = schedule[day] && schedule[day][slot]
+          return (
           <td key={`${day}-${slot}`} className="border border-gray-200 px-4 py-2">
             {userSchedule[day][slot] ? <div className="bg-blue-100 text-blue-800 rounded-lg p-2">{userSchedule[day][slot]}</div> : null}
-          </td>
-        ))}
+          </td>)
+         })}
       </tr>
     ));
   };

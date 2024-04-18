@@ -12,3 +12,10 @@ export const managerRoutes = [
         path: '/manager'
     }
 ]
+
+export const adminRoutes = [
+    {
+        name: "Manager Approval",
+        path: "/manager_approval"
+    }
+]

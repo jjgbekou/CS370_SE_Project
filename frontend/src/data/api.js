@@ -59,6 +59,18 @@ export async function createUser(userObject) {
     }
 }
 
+export async function createManager(managerObject) {
+    let data
+    try {
+        data = await axios.post(`${BASE_URL}/create_manager/`, {manager_data: managerObject})
+        console.log(data)
+    } catch(error) {
+        console.log(`Error occured during creation: ${error}`)
+    } finally {
+        return data
+    }
+}
+
 export async function updateUser(userId, userObject) {
     let data = axios.put()
 }
@@ -113,5 +125,14 @@ export async function inputScholarshipHours(hours) {
         let data = axios.put(`${BASE_URL}/get_scholarship_hours/`, hours)
     } catch(error) {
         console.log(`Error while inputting scholarship hours: ${error}`)
+    }
+}
+
+export async function getManagers() {
+    try {
+        let data = axios.get(`${BASE_URL}/get_managers/`)
+        return data
+    } catch(error) {
+        console.log(`Error occured while fetching all users: ${error}`)
     }
 }
