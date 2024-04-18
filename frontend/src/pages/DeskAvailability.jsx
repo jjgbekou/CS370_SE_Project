@@ -37,7 +37,8 @@ export function DeskAvailability() {
     } else {
       const startTime = calculateTime(hourIndex);
       const endTime = calculateTime(hourIndex + 1);
-      updatedAvailability[day][hourIndex] = [startTime, endTime]; // Set start and end time if available
+      //updatedAvailability[day][hourIndex] = [startTime, endTime]; // Set start and end time if available
+      updatedAvailability[day][hourIndex] = startTime
     }
     setAvailability(updatedAvailability);
   };
