@@ -20,11 +20,11 @@ export async function verifyUser(userObject) {
         let data = await axios.post(`${BASE_URL}/login/`, userObject)
         if (data.status === 200) {
             let user_id = data.data.id
-            let view = data.data.isManager ? "Manager" : "User"
+            //let view = data.data.isManager ? "Manager" : "User"
             
             return {
                 id: user_id,
-                view: view,
+                view: data.data.view,
                 success: true
             }
         } else {
@@ -140,11 +140,21 @@ export async function inputScholarshipHours(hours) {
     }
 }
 
-export async function getManagers() {
+export async function getUnapprovedManagers() {
     try {
-        let data = axios.get(`${BASE_URL}/get_managers/`)
+        let data = axios.get(`${BASE_URL}/return_unapproved_managers_to_admin/`)
         return data
     } catch(error) {
         console.log(`Error occured while fetching all users: ${error}`)
+    }
+}
+
+export async function approveManager(managerId) {
+    console.log(managerId)
+    try {
+        let data = axios.put(`${BASE_URL}/approve_manager/`, {manager_id: managerId})
+        return data
+    } catch(error) {
+        console.log(`Error occured while approving manager: ${error}`)
     }
 }

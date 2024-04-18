@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom"
-import { managerRoutes } from "../data/routes"
+import { managerRoutes, adminRoutes } from "../data/routes"
 import logo from "../assets/Truman_Bulldogs_logo.svg.png"
 
 export function Navbar() {
 
     let user = JSON.parse(sessionStorage.getItem("User"))
-    let userView = user.view == "User"
+    let view = user.view
     let userId = user.userId
 
     const userRoutes = [
@@ -65,7 +65,7 @@ export function Navbar() {
             </div>
             <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
                 <ul className="flex flex-col font-medium md:p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                {userView ? 
+                {view === "User" &&
                 userRoutes.map((route) => {
                     return (
                         <li key={route.path}>
@@ -74,8 +74,8 @@ export function Navbar() {
                             </Link>
                         </li>
                     )
-                })
-                :
+                })}
+                {view === "Manager" &&
                 managerRoutes.map((route) => {
                     return (
                         <li>
@@ -84,8 +84,17 @@ export function Navbar() {
                             </Link>
                         </li>
                     )
-                })
-                }
+                })}
+                {view === "Admin" &&
+                adminRoutes.map((route) => {
+                    return (
+                        <li>
+                            <Link to={route.path} className="block py-2 px-3 text-black bg-truman-blue rounded-md" aria-current="page">
+                                {route.name}
+                            </Link>
+                        </li>
+                    )
+                })}
                 </ul>
             </div>
             </div>
