@@ -23,7 +23,7 @@ function App() {
           <Route path="/availability" element={<UserAvailability/>}/>
           <Route path="/userlist" element={<UserList/>}/>
           <Route path="/manager" element={<Manager/>}/>
-          <Route path="/myschedule" element={<Profile/>}/>
+          <Route path="/myschedule/:id" element={<Profile/>}/>
           <Route path="/da_availability" element={<DeskAvailability/>}/>
         </Route>
       </Routes>

@@ -292,7 +292,9 @@ def generate_da_schedule(request):
                 #print("Inside second if")
                 selected_desk_assistant = random.choice(available_desk_assistants)
                 # Assign desk assistant to time slot
-                big_schedule[day][current_time.strftime('%H:%M')] = selected_desk_assistant['firstname'] + ' ' + selected_desk_assistant['lastname']
+                name = selected_desk_assistant['firstname'] + ' ' + selected_desk_assistant['lastname']
+                id = selected_desk_assistant['_id']
+                big_schedule[day][current_time.strftime('%H:%M')] = {"name": name,"userId": str(id)}
                 # Deduct one hour from scheduled hours of the selected desk assistant
                 users_collection.update_one({'_id': selected_desk_assistant['_id']}, {"$inc": {'scheduled_hours': -1}})
             else:

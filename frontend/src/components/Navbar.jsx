@@ -17,6 +17,10 @@ export function Navbar() {
             name: "Desk Availability",
             path: '/da_availability'
         },
+        {
+            name: "My Schedule",
+            path: `/myschedule/${userId}`
+        }
     ]
     
     return (

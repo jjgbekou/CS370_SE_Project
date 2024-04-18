@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import moment from "moment/moment";
 import { Loading } from "./Loading";
 
-export function MySchedule() {
+export function MySchedule( {userId} ) {
 
   const [schedule, setSchedule] = useState({})
   const [loading, setLoading] = useState(true)

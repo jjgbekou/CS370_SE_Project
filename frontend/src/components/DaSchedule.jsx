@@ -32,9 +32,12 @@ const generateTimeSlots = () => {
         <td className="border border-gray-200 px-4 py-2">{slot}</td>
         {days.map((day, index) => {
           const person = schedule[day] && schedule[day][slot];
+          console.log(schedule[day])
+          console.log(schedule[day][slot])
+          console.log(person)
           return (
             <td key={`${day}-${slot}`} className="border border-gray-200 px-4 py-2">
-              {person && <div className="bg-blue-100 rounded-lg p-2 text-black">{person}</div>}
+              {person && <div className="bg-blue-100 rounded-lg p-2 text-black">{person.name}</div>}
             </td>
           );
         })}
