@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react"
-import { getDaSchedule } from "../data/api"
 import { ConfirmationModal } from "../components/ConfirmationModal"
 import { applyForShift, giveUpShift } from "../data/api"
 import moment from 'moment'
 
-export function DaSchedule( {schedule, userId} ) {
+export function DaSchedule( {schedule, userId, setRefresh} ) {
 
   const [giveIsOpen, setGiveIsOpen] = useState(false)
   const [applyIsOpen, setApplyIsOpen] = useState(false)
@@ -73,7 +72,6 @@ const generateTimeSlots = () => {
 
   async function handleApplyShift(userObject) {
     await applyForShift(userObject)
-    setApplyPerson({})
   }
 
   function openGiveModal() {
@@ -99,8 +97,8 @@ const generateTimeSlots = () => {
           {renderScheduleRows()}
         </tbody>
       </table>
-      {giveIsOpen && <ConfirmationModal title={"Give up this shift?"} message={"Giving up this shift will remove you from the schedule in this time slot. Press confirm to give it up."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={giveIsOpen} setIsOpen={setGiveIsOpen} confirmationFunction={handleGiveShift} confirmationParams={givePerson}/>}
-      {applyIsOpen && <ConfirmationModal title={"Apply for this shift?"} message={"If this shift is empty, you can apply yourself to work this shift. Press confirm to apply."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={applyIsOpen} setIsOpen={setApplyIsOpen} confirmationFunction={handleApplyShift} confirmationParams={applyPerson}/>}
+      {giveIsOpen && <ConfirmationModal title={"Give up this shift?"} message={"Giving up this shift will remove you from the schedule in this time slot. Press confirm to give it up."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={giveIsOpen} setIsOpen={setGiveIsOpen} confirmationFunction={handleGiveShift} confirmationParams={givePerson} setRefresh={setRefresh}/>}
+      {applyIsOpen && <ConfirmationModal title={"Apply for this shift?"} message={"If this shift is empty, you can apply yourself to work this shift. Press confirm to apply."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={applyIsOpen} setIsOpen={setApplyIsOpen} confirmationFunction={handleApplyShift} confirmationParams={applyPerson} setRefresh={setRefresh}/>}
     </div>
   );
 }

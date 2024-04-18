@@ -6,41 +6,28 @@ import { Loading } from "../components/Loading"
 
 export function Home() {
 
-    const [schedule, setSchedule] = useState({
-        Monday: {
-          '8:30': 'John Doe',
-          '9:00': 'Jane Smith',
-          '12:00': 'Alice',
-          '16:00': 'Bob'
-        },
-        Tuesday: {
-          '10:00': 'John Doe',
-          '12:30': 'Alice',
-          '16:00': 'Jane Smith'
-        },
-      })
+    const [refresh, setRefresh] = useState(false)
+    const [schedule, setSchedule] = useState({})
+    const [loading, setLoading] = useState(true)
 
-      const [realSchedule, setRealSchedule] = useState({})
-      const [loading, setLoading] = useState(true)
-
-      const user = JSON.parse(sessionStorage.getItem("User"))
-      const userId = user.userId
+    const user = JSON.parse(sessionStorage.getItem("User"))
+    const userId = user.userId
 
     useEffect(() => {
       async function loadSchedule() {
         let data = await getDaSchedule()
         console.log(data)
-        setRealSchedule(data.data.schedule)
+        setSchedule(data.data.schedule)
         setLoading(false)
       }
       loadSchedule()
-    }, [])
+    }, [refresh])
 
     return (
       <>
         {!loading ? 
         <div className="flex w-full justify-center">
-            <DaSchedule schedule={realSchedule} userId={userId}/>
+            <DaSchedule schedule={schedule} userId={userId} setRefresh={setRefresh}/>
             
         </div>
         :

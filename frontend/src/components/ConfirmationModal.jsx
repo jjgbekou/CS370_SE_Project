@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react'
 import { Loading } from './Loading'
 import { AlertModal } from './AlertModal'
 
-export function ConfirmationModal({title, message, buttonCancel, buttonConfirm, isOpen, setIsOpen, confirmationFunction, confirmationParams}) {
+export function ConfirmationModal({title, message, buttonCancel, buttonConfirm, isOpen, setIsOpen, confirmationFunction, confirmationParams, setRefresh}) {
     const [loading, setLoading] = useState(false)
     const [done, setDone] = useState(false)
     const [alertIsOpen, setAlertIsOpen] = useState(false)
@@ -26,6 +26,10 @@ export function ConfirmationModal({title, message, buttonCancel, buttonConfirm, 
     setLoading(false)
     openAlertModal()
     setDone(true)
+    if (setRefresh) {
+      console.log("hey")
+      setRefresh(true)
+    }
   }
 
   return (
