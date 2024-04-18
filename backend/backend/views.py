@@ -58,28 +58,37 @@ def create_manager(request):
     
 
 def return_unapproved_managers_to_admin(request):
-    unapproved_managers = list(managers_collection.find())
+    unapproved_managers = list(managers_collection.find({"verified_manager" : False}))
+    print(unapproved_managers)
     managers_info = []
     for manager in unapproved_managers:
+        #print(manager.get("verified_manager"))
         manager_info = {
             'firstname' : manager.get('firstname'),
             'lastname' : manager.get('lastname'),
             'email' : manager.get('email'),
-            'request_date': manager.get('request_date')
+            'request_date': manager.get('request_date'),
+            '_id' : str(manager.get('_id'))
 
             #'unavailability' : worker.get('unavailability')
         }
         managers_info.append(manager_info)
     
+    
     return JsonResponse({'managers':managers_info})
 
 def approve_manager(request):
     data = json.loads(request.body.decode('utf-8'))
-    manager_id = data
+    manager_id = data.get('manager_id')
+    print(data)
     unapproved_managers = list(managers_collection.find())
-    found = managers_collection.find_one({'_id': manager_id})
+    found = managers_collection.find_one({'_id': ObjectId(manager_id)})
+    print(found)
     if found:
-        managers_collection.update_one({'_id': manager_id}, {"$inc": {'verified_manager': True}})
+        managers_collection.update_one({'_id': ObjectId(manager_id)}, {"$set": {'verified_manager': True}})
+        return JsonResponse({"message" : "Manager successfully approved"})
+    else:
+        return JsonResponse({"message": "Something went wrong"})
 
 
 
@@ -342,7 +351,7 @@ def login(request):
                 
                 # # Return the JWT token as a response
                 # return JsonResponse({"token": token})
-                return JsonResponse({"message": "Login successful", "id": id})
+                return JsonResponse({"message": "Login successful", "id": id, "view": "User"})
             else:
                 # Return error response if password is incorrect
                 return JsonResponse({"error": "Incorrect password"}, status=401)
@@ -361,7 +370,7 @@ def login(request):
                     
                     # # Return the JWT token as a response
                     # return JsonResponse({"token": token})
-                    return JsonResponse({"message": "Login successful", "id": id})
+                    return JsonResponse({"message": "Login successful", "id": id, "view": "Manager"})
                 else:
                     return JsonResponse({"message": "You are not an approved manager"})
             
