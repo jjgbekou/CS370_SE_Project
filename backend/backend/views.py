@@ -326,6 +326,7 @@ def login(request):
         # Find user by email in the database
         user = users_collection.find_one({'email': email})
         manager = managers_collection.find_one({'email': email})
+        admin = administrator.find_one({'email': email})
         
         # If user is found
         if user:
@@ -363,11 +364,25 @@ def login(request):
                     return JsonResponse({"message": "Login successful", "id": id})
                 else:
                     return JsonResponse({"message": "You are not an approved manager"})
-
             
+        elif admin:
+            # Retrieve hashed password from the database
+            hashed_password = admin.get('password')
+            
+            # Check if the provided password matches the hashed password
+            if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
+                # Return success message upon successful login
+                admin_id = admin.get('_id')
+                id = json.loads(json_util.dumps(admin_id))
+                # token = jwt.encode({'user_id': str(user['_id'])}, 'SECRET_KEY', algorithm='HS256').decode('utf-8')
+                
+                # # Return the JWT token as a response
+                # return JsonResponse({"token": token})
+                return JsonResponse({"message": "Login successful", "id": id})
             else:
                 # Return error response if password is incorrect
                 return JsonResponse({"error": "Incorrect password"}, status=401)
+        
         else:
             # Return error response if user with given email is not found
             return JsonResponse({"error": "User not found"}, status=404)
