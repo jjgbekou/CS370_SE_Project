@@ -16,8 +16,10 @@ db = client['SchedulingProject']
 users_collection = db['user']
 schedule = db['schedule']
 managers_collection = db['manager']
+administrator = db['admin']
 
-SEMESTER_SCHOLARSHIP_HOURS = 51
+
+#SEMESTER_SCHOLARSHIP_HOURS = 51
 
 def create_manager(request):
     #Create a manager
@@ -127,7 +129,7 @@ def create_user(request):
         lastname = user_data.get('user_data', {}).get('lastname')
         firstname = user_data.get('user_data', {}).get('firstname')
         worker_type = user_data.get('user_data', {}).get('worker_type')
-        job_type = user_data.get('user_data', {}).get('job_type')
+        #job_type = user_data.get('user_data', {}).get('job_type')
         worker_id = user_data.get('user_data', {}).get('worker_id')
         email = user_data.get('user_data', {}).get('email')
         password = user_data.get('user_data', {}).get('password')
@@ -135,7 +137,7 @@ def create_user(request):
         unavailability = {}
 
         # Check if all required fields are provided
-        if lastname and firstname and worker_type and job_type and worker_id and email and password:
+        if lastname and firstname and worker_type and worker_id and email and password:
             # Initialize scheduled hours based on job type
             if worker_type == "Scholarship":
                 scholarship_hours = managers_collection.find_one({})
@@ -150,7 +152,7 @@ def create_user(request):
                 'lastname': lastname,
                 'firstname': firstname,
                 'worker_type': worker_type,
-                'job_type': job_type,
+                #'job_type': job_type,
                 'worker_id' : worker_id,
                 'scheduled_hours': scheduled_hours,  # Track scheduled hours
                 #'worked_hours': 0,  # Initialize worked hours
@@ -286,6 +288,13 @@ def generate_da_schedule(request):
             # Print available desk assistants
             #print("Available desk assistants:", available_desk_assistants)
 
+            #print("Not available:", desk_assistant['firstname'], desk_assistant['lastname'])
+            # print(day, ", ", current_time, ": ")
+            # for available in available_desk_assistants:
+            #     print(available['firstname'])
+            # print("")
+            # print("")
+
               
             # Randomly select a desk assistant from the available ones
             if available_desk_assistants:
@@ -298,7 +307,7 @@ def generate_da_schedule(request):
                 # Deduct one hour from scheduled hours of the selected desk assistant
                 users_collection.update_one({'_id': selected_desk_assistant['_id']}, {"$inc": {'scheduled_hours': -1}})
             else:
-                big_schedule[day][current_time.strftime('%H:%M')] = "XXXXX"
+                big_schedule[day][current_time.strftime('%H:%M')] = None
             
             # Move to the next time slot
             current_time += timedelta(hours=1)
