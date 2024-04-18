@@ -2,10 +2,12 @@ import { getAllUsers } from "../data/api"
 import { useEffect, useState } from "react"
 import { deleteUser } from "../data/api";
 import { Loading } from "../components/Loading";
+import { ConfirmationModal } from "../components/ConfirmationModal";
 
 export function UserList() {
 
     const [isOpen, setIsOpen] = useState(false)
+    const [deleteId, setDeleteId] = useState(null)
     const [users, setUsers] = useState([
         {
           name: 'John Doe',
@@ -28,13 +30,10 @@ export function UserList() {
       ]);
 
     const [loading, setLoading] = useState(true)
-
-    function closeModal() {
-        setIsOpen(false)
-      }
     
-      function openModal() {
+      function openModal(user) {
         setIsOpen(true)
+        setDeleteId(user.worker_id)
       }
 
     let user = JSON.parse(sessionStorage.getItem("User"))
@@ -50,8 +49,8 @@ export function UserList() {
         loadUsers()
     }, [])
 
-    async function handleDelete(user) {
-        await deleteUser(user.worker_id)
+    async function handleDelete() {
+        await deleteUser(deleteId)
     }
 
     return (
@@ -81,7 +80,7 @@ export function UserList() {
                         <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{user.job_type}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{user.worker_type}</td>
-                        <td onClick={openModal} className="cursor-pointer">Remove</td>
+                        <td onClick={() => openModal(user)} className="cursor-pointer">Remove</td>
                     </tr>
                     ))}
                 </tbody>
@@ -93,6 +92,7 @@ export function UserList() {
         </div>
         :
         <Loading/>}
+        <ConfirmationModal title={"Are you sure?"} message={"This will remove the user from the active database. If you are prepared to terminate this user, press confirm. Otherwise, cancel."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={isOpen} setIsOpen={setIsOpen} confirmationFunction={handleDelete} confirmationParams={deleteId}/>
         </>
     )
 }
