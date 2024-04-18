@@ -83,11 +83,6 @@ def approve_manager(request):
 
 
 
-
-
-
-
-
 def create_user(request):
     # Extracting data from the request (assuming it's sent as JSON)
     user_data = json.loads(request.body.decode('utf-8'))
