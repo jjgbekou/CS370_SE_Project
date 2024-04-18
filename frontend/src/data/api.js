@@ -112,11 +112,23 @@ export async function releaseSchedule() {
     }
 }
 
-export async function updateSchedule(scheduleId) {
+export async function giveUpShift(userObject) {
+    console.log(userObject)
     try {
-        let data = axios.put()
+        let data = axios.put(`${BASE_URL}/give_up_shift/`, {time_slot : userObject.time_slot, worker_id : userObject.worker_id, day: userObject.day})
+        return data
     } catch(error) {
-        console.log(`Error while updating schedule: ${error}`)
+        console.log(`Error giving up shift: ${error}`)
+    }
+}
+
+export async function applyForShift(userObject) {
+    console.log(userObject)
+    try {
+        let data = axios.put(`${BASE_URL}/apply_for_shift/`, {time_slot : userObject.time_slot, worker_id : userObject.worker_id, day: userObject.day})
+        return data
+    } catch(error) {
+        console.log(`Error applying for shift: ${error}`)
     }
 }
 

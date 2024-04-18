@@ -414,6 +414,7 @@ def return_workers_info(request):
 
 def give_up_shift(request):
     data = json.loads(request.body.decode('utf-8'))
+    print(data)
     worker_id = data.get('worker_id')
     day = data.get('day')
     time_slot = data.get('time_slot')
@@ -438,6 +439,7 @@ def give_up_shift(request):
 
 def apply_for_shift(request):
     data = json.loads(request.body.decode('utf-8'))
+    print(data)
     worker_id = data.get('worker_id')
     day = data.get('day')
     time_slot = data.get('time_slot')
@@ -450,15 +452,15 @@ def apply_for_shift(request):
             # Check if the specified time slot is available
             if schedule_document[day][time_slot] == None:
                 # Fetch the worker's full name
-                worker = users_collection.find_one({'worker_id': worker_id})
+                worker = users_collection.find_one({'_id': ObjectId(worker_id)})
                 full_name = f"{worker.get('firstname')} {worker.get('lastname')}"
                 
                 # Assign the shift to the worker
-                schedule_document[day][time_slot] = full_name
+                schedule_document[day][time_slot] = {"name":full_name, "userId":worker_id}
                 schedule.update_one({}, {"$set": schedule_document})
                 
                 # Decrease the scheduled hours for the worker
-                users_collection.update_one({'worker_id': worker_id}, {"$inc": {'scheduled_hours': -1}})
+                users_collection.update_one({'_id': ObjectId(worker_id)}, {"$inc": {'scheduled_hours': -1}})
                 
                 return JsonResponse({"message": "Shift applied successfully"})
             else:

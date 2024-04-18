@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react"
 import { getDaSchedule } from "../data/api"
+import { ConfirmationModal } from "../components/ConfirmationModal"
+import { applyForShift, giveUpShift } from "../data/api"
 import moment from 'moment'
 
-export function DaSchedule( {schedule} ) {
+export function DaSchedule( {schedule, userId} ) {
+
+  const [giveIsOpen, setGiveIsOpen] = useState(false)
+  const [applyIsOpen, setApplyIsOpen] = useState(false)
+  const [givePerson, setGivePerson] = useState({})
+  const [applyPerson, setApplyPerson] = useState({})
+
 // Function to generate time slots from 8:30am to 5:30pm in hour-long increments
 const generateTimeSlots = () => {
     const timeSlots = [];
@@ -32,18 +40,49 @@ const generateTimeSlots = () => {
         <td className="border border-gray-200 px-4 py-2">{slot}</td>
         {days.map((day, index) => {
           const person = schedule[day] && schedule[day][slot];
-          console.log(schedule[day])
-          console.log(schedule[day][slot])
-          console.log(person)
           return (
-            <td key={`${day}-${slot}`} className="border border-gray-200 px-4 py-2">
-              {person && <div className="bg-blue-100 rounded-lg p-2 text-black">{person.name}</div>}
+            <td key={`${day}-${slot}`} className={"border border-gray-200 px-4 py-2 " + (!person ? "cursor-pointer hover:bg-blue-500" : "")} onClick={() => handleApplyClick(day, slot, person)}>
+              {person && <div className={"bg-blue-100 rounded-lg p-2 text-black " + (person.userId == userId ? "cursor-pointer hover:bg-blue-500" : "")} onClick={() => handleGiveClick(day, slot, person)}>{person.name}</div>}
             </td>
           );
         })}
       </tr>
     ));
   };
+
+  // Function to handle click event on a cell
+  const handleGiveClick = (day, slot, person) => {
+    if ((schedule[day] && schedule[day][slot]).userId == userId) {
+      // Call the provided onCellClick function if the cell belongs to the current user
+      openGiveModal()
+      setGivePerson({time_slot: slot, worker_id: person.userId, day: day})
+    }
+  };
+
+  const handleApplyClick = (day, slot, person) => {
+    if (!person) {
+      openApplyModal()
+      setApplyPerson({time_slot: slot, worker_id: userId, day: day})
+    }
+  }
+
+  async function handleGiveShift(userObject) {
+    await giveUpShift(userObject)
+    setGivePerson({})
+  }
+
+  async function handleApplyShift(userObject) {
+    await applyForShift(userObject)
+    setApplyPerson({})
+  }
+
+  function openGiveModal() {
+    setGiveIsOpen(true)
+  }
+
+  function openApplyModal() {
+    setApplyIsOpen(true)
+  }
 
   return (
     <div className="hourly-schedule-calendar mt-28">
@@ -60,6 +99,8 @@ const generateTimeSlots = () => {
           {renderScheduleRows()}
         </tbody>
       </table>
+      {giveIsOpen && <ConfirmationModal title={"Give up this shift?"} message={"Giving up this shift will remove you from the schedule in this time slot. Press confirm to give it up."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={giveIsOpen} setIsOpen={setGiveIsOpen} confirmationFunction={handleGiveShift} confirmationParams={givePerson}/>}
+      {applyIsOpen && <ConfirmationModal title={"Apply for this shift?"} message={"If this shift is empty, you can apply yourself to work this shift. Press confirm to apply."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={applyIsOpen} setIsOpen={setApplyIsOpen} confirmationFunction={handleApplyShift} confirmationParams={applyPerson}/>}
     </div>
   );
 }

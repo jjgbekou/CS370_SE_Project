@@ -23,6 +23,9 @@ export function Home() {
       const [realSchedule, setRealSchedule] = useState({})
       const [loading, setLoading] = useState(true)
 
+      const user = JSON.parse(sessionStorage.getItem("User"))
+      const userId = user.userId
+
     useEffect(() => {
       async function loadSchedule() {
         let data = await getDaSchedule()
@@ -37,7 +40,7 @@ export function Home() {
       <>
         {!loading ? 
         <div className="flex w-full justify-center">
-            <DaSchedule schedule={realSchedule}/>
+            <DaSchedule schedule={realSchedule} userId={userId}/>
             
         </div>
         :
