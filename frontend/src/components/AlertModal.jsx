@@ -9,9 +9,6 @@ export function AlertModal({title, message, button, isOpen, setIsOpen, doneFunct
     }
   }
 
-  function openModal() {
-    setIsOpen(true)
-  }
 
   return (
     <>

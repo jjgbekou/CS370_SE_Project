@@ -1,33 +1,36 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
+import { Loading } from './Loading'
+import { AlertModal } from './AlertModal'
 
-export function ConfirmationModal({title, message, button, isOpen, confirmationFunction, confirmationId}) {
-  let [isOpen, setIsOpen] = useState(true)
+export function ConfirmationModal({title, message, buttonCancel, buttonConfirm, isOpen, setIsOpen, confirmationFunction, confirmationParams}) {
+    const [loading, setLoading] = useState(false)
+    const [done, setDone] = useState(false)
+    const [alertIsOpen, setAlertIsOpen] = useState(false)
+
+    function openAlertModal() {
+        setAlertIsOpen(true)
+    }
+
+    function closeAlertModal() {
+        setAlertIsOpen(false)
+    }
 
   function closeModal() {
     setIsOpen(false)
   }
 
-  function openModal() {
-    setIsOpen(true)
-  }
-
   async function handleConfirmation() {
-    await confirmationFunction(confirmationId)
+    setLoading(true)
+    await confirmationFunction(confirmationParams)
+    setLoading(false)
+    openAlertModal()
+    setDone(true)
   }
 
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center">
-        <button
-          type="button"
-          onClick={openModal}
-          className="rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
-        >
-          Open dialog
-        </button>
-      </div>
-
+        {!done ? 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
@@ -54,6 +57,7 @@ export function ConfirmationModal({title, message, button, isOpen, confirmationF
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                    {!loading && <>
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
@@ -66,21 +70,29 @@ export function ConfirmationModal({title, message, button, isOpen, confirmationF
                     </p>
                   </div>
 
-                  <div className="mt-4">
+                  <div className="mt-4 flex justify-around">
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 bg-red-500"
                       onClick={closeModal}
                     >
-                      {button}
+                      {buttonCancel}
                     </button>
-                  </div>
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 bg-green-500"
+                      onClick={handleConfirmation}
+                    >
+                      {buttonConfirm}
+                    </button>
+                  </div></>}
+                  {loading && <Loading/>}
                 </Dialog.Panel>
               </Transition.Child>
             </div>
           </div>
         </Dialog>
-      </Transition>
+      </Transition> : <AlertModal title={"Success"} message={"Action went through successfully. Click confirm to return to page."} button={"Confirm"} isOpen={alertIsOpen} setIsOpen={setAlertIsOpen} doneFunction={closeAlertModal}/>}
     </>
   )
 }

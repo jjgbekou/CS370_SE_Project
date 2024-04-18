@@ -64,7 +64,7 @@ export function Navbar() {
                 {userView ? 
                 userRoutes.map((route) => {
                     return (
-                        <li>
+                        <li key={route.path}>
                             <Link to={route.path} className="block py-2 px-3 bg-truman-blue text-black rounded-md" aria-current="page">
                                 {route.name}
                             </Link>

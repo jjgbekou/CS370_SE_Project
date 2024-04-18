@@ -1,8 +1,11 @@
 import moment from 'moment';
 import { useState } from 'react';
 import { updateUserAvailability } from '../data/api';
+import { AlertModal } from '../components/AlertModal';
+import { useNavigate } from 'react-router-dom';
 
 export function DeskAvailability() {
+  const [isOpen, setIsOpen] = useState(false)
   // Initialize availability state for all 7 days with empty arrays for time slots
   const [availability, setAvailability] = useState({
     Monday: [],
@@ -16,6 +19,15 @@ export function DeskAvailability() {
 
   let user = JSON.parse(sessionStorage.getItem("User"));
   let userView = user.view === "User";
+  let navigate = useNavigate()
+
+  function openModal() {
+    setIsOpen(true)
+  }
+
+  function redirect() {
+    navigate("/home")
+  }
 
   // Function to toggle availability of a specific slot
   const toggleAvailability = (day, hourIndex) => {
@@ -42,6 +54,11 @@ export function DeskAvailability() {
     let userId = user.userId;
     let userObject = { worker_id: userId, unavailability: availability };
     let data = await updateUserAvailability(userObject);
+    if (data.status == 200) {
+      openModal()
+    } else {
+      alert("Something went wrong :(")
+    }
     // Handle response if needed
   }
 
@@ -94,6 +111,7 @@ export function DeskAvailability() {
       ) : (
         <h1>You do not have permission to access this page</h1>
       )}
+      {isOpen && <AlertModal title={"Availability Submitted"} message={"Your availability has been successfully submitted for the next work cycle. Confirm to navigate to the schedule page."} button={"Confirm"} isOpen={isOpen} setIsOpen={setIsOpen} doneFunction={redirect}/>}
     </>
   );
 };
