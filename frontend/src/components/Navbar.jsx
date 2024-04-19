@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom"
 import { managerRoutes, adminRoutes } from "../data/routes"
 import logo from "../assets/Truman_Bulldogs_logo.svg.png"
+import { useNavigate } from "react-router-dom"
 
 export function Navbar() {
 
     let user = JSON.parse(sessionStorage.getItem("User"))
     let view = user.view
     let userId = user.userId
+    let navigate = useNavigate()
 
     const userRoutes = [
         {
@@ -23,6 +25,11 @@ export function Navbar() {
         }
     ]
     
+    function handleLogout() {
+        sessionStorage.removeItem("User")
+        navigate('/')
+    }
+
     return (
         <nav className="bg-truman-purple border-gray-200 bg-gray-900 w-screen fixed top-0 left-0">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -31,9 +38,8 @@ export function Navbar() {
                 <span className="self-center text-4xl font-semibold whitespace-nowrap dark:text-white">TruFlow</span>
             </Link>
             <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
-                    <span className="sr-only">Open user menu</span>
-                    <img className="w-8 h-8 rounded-full" src={logo} alt="user photo"/>
+                <button type="button" onClick={handleLogout} className="flex p-2 mr-16 text-sm bg-truman-blue border-4 border-solid border-black rounded-md focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button">
+                    Logout
                 </button>
             
                 <div className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">
@@ -86,9 +92,9 @@ export function Navbar() {
                     )
                 })}
                 {view === "Admin" &&
-                adminRoutes.map((route, key) => {
+                adminRoutes.map((route) => {
                     return (
-                        <li key={key}>
+                        <li>
                             <Link to={route.path} className="block py-2 px-3 text-black bg-truman-blue rounded-md" aria-current="page">
                                 {route.name}
                             </Link>

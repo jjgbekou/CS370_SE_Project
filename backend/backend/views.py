@@ -16,7 +16,7 @@ db = client['SchedulingProject']
 users_collection = db['user']
 schedule = db['schedule']
 managers_collection = db['manager']
-administrator = db['admin']
+administrator = db['administrator']
 scholarship_collection = db['scholarship_collection']
 
 
@@ -326,6 +326,7 @@ def update_unavailability(request): #Here, if worker updated its unavailability,
 
 
 def login(request):
+    print("We are in login route")
     # Extract email and password from request
     data = json.loads(request.body.decode('utf-8'))
     email = data.get('email')
@@ -336,6 +337,8 @@ def login(request):
         user = users_collection.find_one({'email': email})
         manager = managers_collection.find_one({'email': email})
         admin = administrator.find_one({'email': email})
+
+        print(admin)
         
         # If user is found
         if user:
@@ -376,6 +379,7 @@ def login(request):
             
         elif admin:
             # Retrieve hashed password from the database
+            print("Admin if")
             hashed_password = admin.get('password')
             
             # Check if the provided password matches the hashed password
@@ -453,7 +457,7 @@ def give_up_shift(request):
             schedule.update_one({}, {"$set": schedule_document})
             
             # Increase the scheduled hours for the worker
-            users_collection.update_one({'worker_id': worker_id}, {"$inc": {'scheduled_hours': 1}})
+            users_collection.update_one({'_id': ObjectId(worker_id)}, {"$inc": {'scheduled_hours': 1}})
             
             return JsonResponse({"message": "Shift given up successfully"})
         else:

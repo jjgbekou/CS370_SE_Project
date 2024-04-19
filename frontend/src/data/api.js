@@ -16,6 +16,7 @@ export async function updateUserAvailability(userObject) {
 }
 
 export async function verifyUser(userObject) {
+    let data
     try {
         let data = await axios.post(`${BASE_URL}/login/`, userObject)
         if (data.status === 200) {
@@ -25,16 +26,29 @@ export async function verifyUser(userObject) {
             return {
                 id: user_id,
                 view: data.data.view,
-                success: true
+                success: true,
+                status: data.status
             }
-        } else {
-            return {
-                success: false
+        }} catch (error) {
+            if (error.response) {
+                if (error.response.status === 404) {
+                    return {
+                        success: false,
+                        status: 404
+                    }
+                } else if (error.response.status === 401) {
+                    return {
+                        success: false,
+                        status: 401
+                    }
+                } else {
+                    return {
+                        success: false,
+                        status: 400
+                    }
+                }
             }
         }
-    } catch(error) {
-        console.log(`Login could not be validated: ${error}`)
-    }
 }
 
 export async function getAllUsers() {

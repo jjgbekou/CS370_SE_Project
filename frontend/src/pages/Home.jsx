@@ -26,7 +26,10 @@ export function Home() {
         }
       }
       loadSchedule()
+      console.log("Hehe xd")
     }, [refresh])
+
+
 
     return (
       <>

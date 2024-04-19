@@ -31,7 +31,8 @@ export function Manager() {
         setRelIsOpen(true)
     }
 
-    function openHoursModal() {
+    function openHoursModal(e) {
+        e.preventDefault()
         setHoursIsOpen(true)
     }
 

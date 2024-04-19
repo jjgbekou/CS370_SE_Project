@@ -10,6 +10,10 @@ export function DaSchedule( {schedule, userId, setRefresh} ) {
   const [givePerson, setGivePerson] = useState({})
   const [applyPerson, setApplyPerson] = useState({})
 
+  useEffect(() => {
+    setRefresh(false)
+  }, [schedule])
+
 // Function to generate time slots from 8:30am to 5:30pm in hour-long increments
 const generateTimeSlots = () => {
     const timeSlots = [];
@@ -51,7 +55,9 @@ const generateTimeSlots = () => {
 
   // Function to handle click event on a cell
   const handleGiveClick = (day, slot, person) => {
+
     if ((schedule[day] && schedule[day][slot]).userId == userId) {
+      console.log("we made it :D")
       // Call the provided onCellClick function if the cell belongs to the current user
       openGiveModal()
       setGivePerson({time_slot: slot, worker_id: person.userId, day: day})
@@ -60,6 +66,7 @@ const generateTimeSlots = () => {
 
   const handleApplyClick = (day, slot, person) => {
     if (!person) {
+      console.log("we made it :D")
       openApplyModal()
       setApplyPerson({time_slot: slot, worker_id: userId, day: day})
     }
@@ -67,7 +74,6 @@ const generateTimeSlots = () => {
 
   async function handleGiveShift(userObject) {
     await giveUpShift(userObject)
-    setGivePerson({})
   }
 
   async function handleApplyShift(userObject) {
@@ -75,11 +81,21 @@ const generateTimeSlots = () => {
   }
 
   function openGiveModal() {
+    console.log(giveIsOpen)
     setGiveIsOpen(true)
   }
 
   function openApplyModal() {
+    console.log(applyIsOpen)
     setApplyIsOpen(true)
+  }
+
+  function closeGiveModal() {
+    setGiveIsOpen(false)
+  }
+
+  function closeApplyModal() {
+    setApplyIsOpen(false)
   }
 
   return (
@@ -97,8 +113,8 @@ const generateTimeSlots = () => {
           {renderScheduleRows()}
         </tbody>
       </table>
-      {giveIsOpen && <ConfirmationModal title={"Give up this shift?"} message={"Giving up this shift will remove you from the schedule in this time slot. Press confirm to give it up."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={giveIsOpen} setIsOpen={setGiveIsOpen} confirmationFunction={handleGiveShift} confirmationParams={givePerson} setRefresh={setRefresh}/>}
-      {applyIsOpen && <ConfirmationModal title={"Apply for this shift?"} message={"If this shift is empty, you can apply yourself to work this shift. Press confirm to apply."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={applyIsOpen} setIsOpen={setApplyIsOpen} confirmationFunction={handleApplyShift} confirmationParams={applyPerson} setRefresh={setRefresh}/>}
+      {giveIsOpen && <ConfirmationModal title={"Give up this shift?"} message={"Giving up this shift will remove you from the schedule in this time slot. Press confirm to give it up."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={giveIsOpen} setIsOpen={setGiveIsOpen} confirmationFunction={handleGiveShift} confirmationParams={givePerson} setRefresh={setRefresh} closeModal={closeGiveModal}/>}
+      {applyIsOpen && <ConfirmationModal title={"Apply for this shift?"} message={"If this shift is empty, you can apply yourself to work this shift. Press confirm to apply."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={applyIsOpen} setIsOpen={setApplyIsOpen} confirmationFunction={handleApplyShift} confirmationParams={applyPerson} setRefresh={setRefresh} closeModal={closeApplyModal}/>}
     </div>
   );
 }
