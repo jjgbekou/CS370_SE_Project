@@ -66,9 +66,9 @@ export function Navbar() {
             <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
                 <ul className="flex flex-col font-medium md:p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                 {view === "User" &&
-                userRoutes.map((route) => {
+                userRoutes.map((route, key) => {
                     return (
-                        <li key={route.path}>
+                        <li key={key}>
                             <Link to={route.path} className="block py-2 px-3 bg-truman-blue text-black rounded-md" aria-current="page">
                                 {route.name}
                             </Link>
@@ -76,9 +76,9 @@ export function Navbar() {
                     )
                 })}
                 {view === "Manager" &&
-                managerRoutes.map((route) => {
+                managerRoutes.map((route, key) => {
                     return (
-                        <li>
+                        <li key={key}>
                             <Link to={route.path} className="block py-2 px-3 text-black bg-truman-blue rounded-md" aria-current="page">
                                 {route.name}
                             </Link>
@@ -86,9 +86,9 @@ export function Navbar() {
                     )
                 })}
                 {view === "Admin" &&
-                adminRoutes.map((route) => {
+                adminRoutes.map((route, key) => {
                     return (
-                        <li>
+                        <li key={key}>
                             <Link to={route.path} className="block py-2 px-3 text-black bg-truman-blue rounded-md" aria-current="page">
                                 {route.name}
                             </Link>

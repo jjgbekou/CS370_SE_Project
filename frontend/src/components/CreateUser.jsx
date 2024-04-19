@@ -37,7 +37,7 @@ export function CreateUser( {setMode} ) {
       }
 
       function redirect() {
-        setMode(true)
+        setMode("Login")
       }
 
     return (

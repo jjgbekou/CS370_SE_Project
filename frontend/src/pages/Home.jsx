@@ -9,6 +9,7 @@ export function Home() {
     const [refresh, setRefresh] = useState(false)
     const [schedule, setSchedule] = useState({})
     const [loading, setLoading] = useState(true)
+    const [released, setReleased] = useState(false)
 
     const user = JSON.parse(sessionStorage.getItem("User"))
     const userId = user.userId
@@ -17,22 +18,32 @@ export function Home() {
       async function loadSchedule() {
         let data = await getDaSchedule()
         console.log(data)
-        setSchedule(data.data.schedule)
+        let sched = data.data.schedule
+        setSchedule(sched)
         setLoading(false)
+        if (sched?.release?.state) {
+          setReleased(true)
+        }
       }
       loadSchedule()
     }, [refresh])
 
     return (
       <>
+        {released ? <>
         {!loading ? 
         <div className="flex w-full justify-center">
             <DaSchedule schedule={schedule} userId={userId} setRefresh={setRefresh}/>
-            
         </div>
         :
         <Loading/>
-        }
+        }</>
+        :
+        <div className="flex flex-col w-screen h-screen justify-center">
+          <span className="flex justify-center text-8xl mb-16"> :(</span>
+          <span className="flex justify-center text-3xl">Schedule has not been released by a manager yet</span>
+        </div>
+      }
       </>
     )
 }
