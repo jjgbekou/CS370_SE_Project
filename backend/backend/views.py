@@ -17,7 +17,7 @@ users_collection = db['user']
 schedule = db['schedule']
 managers_collection = db['manager']
 administrator = db['admin']
-scholarship_hours = db['sc_hours']
+scholarship_collection = db['scholarship_collection']
 
 
 #SEMESTER_SCHOLARSHIP_HOURS = 51
@@ -112,9 +112,9 @@ def create_user(request):
         if lastname and firstname and worker_type and worker_id and email and password:
             # Initialize scheduled hours based on work type
             if worker_type == "Scholarship":
-                scholarship_hours = scholarship_hours.find_one({})
+                hours = scholarship_collection.find_one({})
                 #print(scholarship_hours)
-                scheduled_hours = scholarship_hours.get('scholarship_hours', {}.get('scholarship_hours', 0))
+                scheduled_hours = hours.get('scholarship_hours', {}.get('scholarship_hours', 0))
                 #scheduled_hours = scholarship_hours
             else:
                 scheduled_hours = user_data.get('user_data', {}).get('hours', 0)
@@ -406,8 +406,8 @@ def get_scholarship_hours(request):
     semester_scholarship_hours = hours
     # da_scholarship_workers = users_collection.find({'worker_type': 'Scholarship'})
     # for da_scholarship
-    scholarship_hours.delete_many({})
-    insertion_result = scholarship_hours.insert_one({"scholarship_hours": semester_scholarship_hours})
+    scholarship_collection.delete_many({})
+    insertion_result = scholarship_collection.insert_one({"scholarship_hours": semester_scholarship_hours})
     if insertion_result:
         return JsonResponse({"message": "Input successful"})
     else:
