@@ -36,6 +36,19 @@ export function Manager() {
         setHoursIsOpen(true)
     }
 
+    function closeGenModal() {
+        setGenIsOpen(false)
+    }
+
+    function closeRelModal() {
+        setRelIsOpen(false)
+    }
+
+    function closeHoursModal(e) {
+        e.preventDefault()
+        setHoursIsOpen(false)
+    }
+
     return (
         <>
         <div className="flex justify-center w-full">
@@ -48,9 +61,9 @@ export function Manager() {
                 </form>
             </div>
         </div>
-        {genIsOpen && <ConfirmationModal title={"Are you sure?"} message={"This will generate a new schedule in the database and completely erase the previous one. If you are ready to do that, press confirm. Otherwise, cancel."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={genIsOpen} setIsOpen={setGenIsOpen} confirmationFunction={genSchedule} confirmationParams={null}/>}
-        {relIsOpen && <ConfirmationModal title={"Are you sure?"} message={"This will release the current iteration of the schedule to the users. If you are ready for the users to see a new schedule, press confirm. Otherwise, cancel."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={relIsOpen} setIsOpen={setRelIsOpen} confirmationFunction={relSchedule} confirmationParams={null}/>}
-        {hoursIsOpen && <ConfirmationModal title={"Are you sure?"} message={"Updating scholarship hours will change the hour requirement of every scholarship worker in the database. If you are ready to change all user's hours, press confirm. Otherwise, cancel."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={hoursIsOpen} setIsOpen={setHoursIsOpen} confirmationFunction={handleSubmit} confirmationParams={hours}/>}
+        {genIsOpen && <ConfirmationModal title={"Are you sure?"} message={"This will generate a new schedule in the database and completely erase the previous one. If you are ready to do that, press confirm. Otherwise, cancel."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={genIsOpen} setIsOpen={setGenIsOpen} confirmationFunction={genSchedule} confirmationParams={null} closeModal={closeGenModal}/>}
+        {relIsOpen && <ConfirmationModal title={"Are you sure?"} message={"This will release the current iteration of the schedule to the users. If you are ready for the users to see a new schedule, press confirm. Otherwise, cancel."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={relIsOpen} setIsOpen={setRelIsOpen} confirmationFunction={relSchedule} confirmationParams={null} closeModal={closeRelModal}/>}
+        {hoursIsOpen && <ConfirmationModal title={"Are you sure?"} message={"Updating scholarship hours will change the hour requirement of every scholarship worker in the database. If you are ready to change all user's hours, press confirm. Otherwise, cancel."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={hoursIsOpen} setIsOpen={setHoursIsOpen} confirmationFunction={handleSubmit} confirmationParams={hours} closeModal={closeHoursModal}/>}
         </>
     )
 }

@@ -36,6 +36,10 @@ export function UserList() {
         setDeleteId(user.worker_id)
       }
 
+      function closeModal() {
+        setIsOpen(false)
+      }
+
     let user = JSON.parse(sessionStorage.getItem("User"))
     let userView = user.view == "Manager"
 
@@ -92,7 +96,7 @@ export function UserList() {
         </div>
         :
         <Loading/>}
-        <ConfirmationModal title={"Are you sure?"} message={"This will remove the user from the active database. If you are prepared to terminate this user, press confirm. Otherwise, cancel."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={isOpen} setIsOpen={setIsOpen} confirmationFunction={handleDelete} confirmationParams={deleteId}/>
+        <ConfirmationModal title={"Are you sure?"} message={"This will remove the user from the active database. If you are prepared to terminate this user, press confirm. Otherwise, cancel."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={isOpen} setIsOpen={setIsOpen} confirmationFunction={handleDelete} confirmationParams={deleteId} closeModal={closeModal}/>
         </>
     )
 }
