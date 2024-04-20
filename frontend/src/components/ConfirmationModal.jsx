@@ -26,7 +26,7 @@ export function ConfirmationModal({title, message, buttonCancel, buttonConfirm, 
       console.log("hey")
       setRefresh(true)
     }
-    closeModal()
+    //closeModal()
   }
 
   return (
@@ -93,7 +93,7 @@ export function ConfirmationModal({title, message, buttonCancel, buttonConfirm, 
             </div>
           </div>
         </Dialog>
-      </Transition> : <AlertModal title={"Success"} message={"Action went through successfully. Click confirm to return to page."} button={"Confirm"} isOpen={alertIsOpen} setIsOpen={setAlertIsOpen} doneFunction={closeAlertModal}/>}
+      </Transition> : <AlertModal title={"Success"} message={"Action went through successfully. Click confirm to return to page."} button={"Confirm"} isOpen={alertIsOpen} setIsOpen={setAlertIsOpen} doneFunction={closeAlertModal} closeModal={closeModal}/>}
     </>
   )
 }

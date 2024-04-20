@@ -1,11 +1,14 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 
-export function AlertModal({title, message, button, isOpen, setIsOpen, doneFunction}) {
-  function closeModal() {
+export function AlertModal({title, message, button, isOpen, setIsOpen, doneFunction, closeModal}) {
+  function closeModalLocal() {
     setIsOpen(false)
     if (doneFunction) {
         doneFunction()
+    }
+    if (closeModal) {
+      closeModal()
     }
   }
 
@@ -64,7 +67,7 @@ export function AlertModal({title, message, button, isOpen, setIsOpen, doneFunct
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
+                      onClick={closeModalLocal}
                     >
                       {button}
                     </button>

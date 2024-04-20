@@ -33,20 +33,15 @@ export function Home() {
 
     return (
       <>
-        {released ? <>
-        {!loading ? 
-        <div className="flex w-full justify-center">
-            <DaSchedule schedule={schedule} userId={userId} setRefresh={setRefresh}/>
-        </div>
-        :
-        <Loading/>
-        }</>
-        :
-        <div className="flex flex-col w-screen h-screen justify-center">
+      {(!released && !loading) && <div className="flex flex-col w-screen h-screen justify-center">
           <span className="flex justify-center text-8xl mb-16"> :(</span>
           <span className="flex justify-center text-3xl">Schedule has not been released by a manager yet</span>
-        </div>
-      }
+        </div>}
+      {(!released && loading) && <Loading/>}
+      {(released && loading) && <Loading/>}
+      {(released && !loading) && <div className="flex w-full justify-center">
+            <DaSchedule schedule={schedule} userId={userId} setRefresh={setRefresh}/>
+        </div>}
       </>
     )
 }
