@@ -1,17 +1,17 @@
 # Frontend (React, Vite)
 **To launch:**
 
-cd frontend
-npm install
-npm run dev
+cd frontend\
+npm install\
+npm run dev\
 
 
 # Backend (Python, Django)
 **To launch:**
 
-cd backend
-pip install -r requirements.txt
-python manage.py runserver
+cd backend\
+pip install -r requirements.txt\
+python manage.py runserver\
 
 *Before launching, you need to ensure you have Node installed on your computer (for launching frontend) and Python installed on your computer (for launching backend).*
 
