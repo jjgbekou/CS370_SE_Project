@@ -1,0 +1,5 @@
+bson
+bcrypt
+pymongo
+django
+certifi
