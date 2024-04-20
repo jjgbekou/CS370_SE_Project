@@ -36,6 +36,10 @@ export function CreateUser( {setMode} ) {
         setIsOpen(true)
       }
 
+      function closeModal() {
+        setIsOpen(false)
+      }
+
       function redirect() {
         setMode("Login")
       }
@@ -58,7 +62,7 @@ export function CreateUser( {setMode} ) {
             <input type="password" name="password" placeholder="Password" value={user.password} onChange={handleChange} className="m-2 p-2 rounded-md" required />
             <button type="submit" className="m-2 border-solid border-2 rounded-md border-white bg-truman-purple">Create User</button>
           </form>
-          {isOpen && <AlertModal isOpen={isOpen} setIsOpen={setIsOpen} title={"User Creation Successful"} message={"User account has been created successfully. Return to the login page?"} button={"Confirm"} doneFunction={redirect}/>}
+          {isOpen && <AlertModal isOpen={isOpen} setIsOpen={setIsOpen} title={"User Creation Successful"} message={"User account has been created successfully. Return to the login page?"} button={"Confirm"} doneFunction={redirect} closeModal={closeModal}/>}
         </>
     )
     }
