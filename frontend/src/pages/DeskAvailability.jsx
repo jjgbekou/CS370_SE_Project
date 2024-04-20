@@ -25,6 +25,10 @@ export function DeskAvailability() {
     setIsOpen(true)
   }
 
+  function closeModal() {
+    setIsOpen(false)
+  }
+
   function redirect() {
     navigate("/home")
   }
@@ -112,7 +116,7 @@ export function DeskAvailability() {
       ) : (
         <h1>You do not have permission to access this page</h1>
       )}
-      {isOpen && <AlertModal title={"Availability Submitted"} message={"Your availability has been successfully submitted for the next work cycle. Confirm to navigate to the schedule page."} button={"Confirm"} isOpen={isOpen} setIsOpen={setIsOpen} doneFunction={redirect}/>}
+      {isOpen && <AlertModal title={"Availability Submitted"} message={"Your availability has been successfully submitted for the next work cycle. Confirm to navigate to the schedule page."} button={"Confirm"} isOpen={isOpen} setIsOpen={setIsOpen} doneFunction={redirect} closeModal={closeModal}/>}
     </>
   );
 };
