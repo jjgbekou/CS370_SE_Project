@@ -19,6 +19,10 @@ export function ManagerCard( {manager, setRefresh} ) {
         setIsOpen(true)
     }
 
+    function closeModal() {
+        setIsOpen(false)
+    }
+
     return (
         <>
         <div className=" flex flex-col bg-white shadow-md rounded-md p-4 mb-4">
@@ -31,7 +35,7 @@ export function ManagerCard( {manager, setRefresh} ) {
             Confirm
         </button>
         </div>
-        {isOpen && <ConfirmationModal title={"Confirm this manager?"} message={"Managers have the power to change the schedule. Only confirm a manager if you are certain of their credentials."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={isOpen} setIsOpen={setIsOpen} confirmationFunction={handleApproval} confirmationParams={manager._id} setRefresh={setRefresh}/>}
+        {isOpen && <ConfirmationModal title={"Confirm this manager?"} message={"Managers have the power to change the schedule. Only confirm a manager if you are certain of their credentials."} buttonCancel={"Cancel"} buttonConfirm={"Confirm"} isOpen={isOpen} setIsOpen={setIsOpen} confirmationFunction={handleApproval} confirmationParams={manager._id} setRefresh={setRefresh} closeModal={closeModal}/>}
         </>
     )
 }

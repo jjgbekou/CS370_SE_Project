@@ -15,6 +15,10 @@ export const managerRoutes = [
 
 export const adminRoutes = [
     {
+        name: "Schedule",
+        path: "/home"
+    },
+    {
         name: "Manager Approval",
         path: "/manager_approval"
     }

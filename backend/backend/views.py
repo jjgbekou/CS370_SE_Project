@@ -391,7 +391,7 @@ def login(request):
                 
                 # # Return the JWT token as a response
                 # return JsonResponse({"token": token})
-                return JsonResponse({"message": "Login successful", "id": id})
+                return JsonResponse({"message": "Login successful", "id": id, "view": "Admin"})
             else:
                 # Return error response if password is incorrect
                 return JsonResponse({"error": "Incorrect password"}, status=401)
