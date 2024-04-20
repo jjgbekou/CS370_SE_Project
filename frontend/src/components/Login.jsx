@@ -43,6 +43,14 @@ export function Login() {
         setUnModal(true)
     }
 
+    function closeNotFoundModal() {
+        setNfModal(false)
+    }
+
+    function closeUnauthorizedModal() {
+        setUnModal(false)
+    }
+
     return (
         <>
         <form onSubmit={(e) => handleLogin(e)} className="flex flex-col">
@@ -50,8 +58,8 @@ export function Login() {
             <input onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" className="m-2 p-2 rounded-md" required/>
             <button type="submit" className="bg-truman-purple">Login</button>
         </form>
-        {nfModal && <AlertModal title={"Invalid Email"} message={"The email you entered in does not belong to any registered account. If you need to create a new account, please do so."} button={"Okay"} isOpen={nfModal} setIsOpen={setNfModal}/>}
-        {unModal && <AlertModal title={"Incorrect Password"} message={"The email you entered in was valid, but the password was not correct. Please try again."} button={"Okay"} isOpen={unModal} setIsOpen={setUnModal}/>}
+        {nfModal && <AlertModal title={"Invalid Email"} message={"The email you entered in does not belong to any registered account. If you need to create a new account, please do so."} button={"Okay"} isOpen={nfModal} setIsOpen={setNfModal} closeModal={closeNotFoundModal}/>}
+        {unModal && <AlertModal title={"Incorrect Password"} message={"The email you entered in was valid, but the password was not correct. Please try again."} button={"Okay"} isOpen={unModal} setIsOpen={setUnModal} closeModal={closeUnauthorizedModal}/>}
         </>
     )   
 }
