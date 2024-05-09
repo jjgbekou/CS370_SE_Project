@@ -24,6 +24,7 @@ urlpatterns = [
        path('delete_user/', views.delete_user, name='delete_user'),
        path('generate_da_schedule/', views.generate_da_schedule, name='random_scheduler_for_desk_assistant'),
        path('return_workers_info/', views.return_workers_info, name='return_workers_info'),
+       path('return_managers_info/', views.return_managers_info, name='return_managers_info'),
        path('get_scholarship_hours/', views.get_scholarship_hours, name='get_scholarship_hours'),
        path('update_unavailability/', views.update_unavailability, name='update_unavailability'),
        path('get_da_schedule/', views.get_da_schedule, name='get_da_schedule'),

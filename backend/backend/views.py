@@ -435,6 +435,21 @@ def return_workers_info(request):
         workers_info.append(worker_info)
     
     return JsonResponse({'workers':workers_info})
+
+def return_managers_info(request):
+    #Fetch all workers fro the database
+    all_workers = list(managers_collection.find())
+    
+    workers_info = []
+    for worker in all_workers:
+        worker_info = {
+            'firstname' : worker.get('firstname'),
+            'lastname' : worker.get('lastname'),
+            'email' : worker.get('email'),
+        }
+        workers_info.append(worker_info)
+    
+    return JsonResponse({'workers':workers_info})
     #print(workers_info)
 
 #return_workers_info()

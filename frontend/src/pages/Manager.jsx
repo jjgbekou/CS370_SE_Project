@@ -51,7 +51,7 @@ export function Manager() {
 
     return (
         <>
-        <div className="flex justify-center w-full">
+        <div className="flex justify-center w-full mb-48">
             <div className="flex flex-col justify-center">
                 <button onClick={openGenModal} className="m-2 p-2 font-bold w-48 bg-blue-500">Generate Schedule</button>
                 <button onClick={openRelModal} className="m-2 p-2 font-bold w-48 bg-blue-500">Release Schedule</button>

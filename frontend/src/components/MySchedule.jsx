@@ -81,7 +81,7 @@ const generateTimeSlots = () => {
           <tr className="bg-gray-100">
             <th className="border border-gray-200 px-4 py-2 bg-truman-blue">Time Slot</th>
             {generateDates().map((day, index) => (
-              <th key={index} className="border border-gray-200 px-4 py-2 bg-truman-blue">{day}</th>
+              <th key={index} className="border border-gray-200 px-4 py-2 text-2xl bg-truman-blue">{day}</th>
             ))}
           </tr>
         </thead>

@@ -18,15 +18,15 @@ export function ManagerApproval() {
 
     return (
         <>
-        <div className="flex flex-col w-screen justify-center">
-        <p className="w-64 mb-12">Here is where administrators can confirm manager applications. Only confirm a manager if you are certain they have valid credentials.</p>
-        {managers.map((manager) => {
-            return (
-                <>
-                    <ManagerCard manager={manager} setRefresh={setRefresh}/>
-                </>
-            )
-        })}
+        <div className="flex flex-col mt-24 w-86">
+            <p className="mb-12 text-xl font-bold">Here is where administrators can confirm manager applications. Only confirm a manager if you are certain they have valid credentials.</p>
+            {managers.map((manager) => {
+                return (
+                    <>
+                        <ManagerCard manager={manager} setRefresh={setRefresh}/>
+                    </>
+                )
+            })}
         </div>
         </>
     )

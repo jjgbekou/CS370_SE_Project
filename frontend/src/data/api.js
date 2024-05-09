@@ -58,7 +58,15 @@ export async function getAllUsers() {
     } catch(error) {
         console.log(`Error occured while fetching all users: ${error}`)
     }
+}
 
+export async function getAllManagers() {
+    try {
+        let data = axios.get(`${BASE_URL}/return_managers_info/`)
+        return data
+    } catch(error) {
+        console.log(`Error occured while fetching all managers: ${error}`)
+    }
 }
 
 export async function createUser(userObject) {

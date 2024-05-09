@@ -17,7 +17,10 @@ export function Layout() {
     return (
         <>
             <Navbar/>
-            <Outlet/>
+            <main className="flex w-screen h-screen justify-center mt-24">
+                <Outlet/>
+            </main>
+            
         </>
     )
 }

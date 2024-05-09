@@ -21,5 +21,13 @@ export const adminRoutes = [
     {
         name: "Manager Approval",
         path: "/manager_approval"
-    }
+    },
+    {
+        name: "User List",
+        path: '/userlist'
+    },
+    {
+        name: "Manager List",
+        path: '/managerlist'
+    },
 ]

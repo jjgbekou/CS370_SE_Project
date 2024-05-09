@@ -70,8 +70,11 @@ export function DeskAvailability() {
   return (
     <>
       {userView ? (
+        <div className="flex flex-col mt-20">
+        <span className="mb-8 text-2xl font-bold">Enter in your UNAVAILABILITY here (times you are not available):</span>
+        <span className="mb-8 text-lg">Any submitted unavailability will be taken into account next scheduling cycle</span>
         <div className="availability-picker">
-          <table className="table-auto border border-gray-500 mt-20">
+          <table className="table-auto border border-gray-500 ">
             <thead>
               <tr>
                 <th className="px-4 py-2 border border-gray-500"></th>
@@ -112,6 +115,7 @@ export function DeskAvailability() {
           >
             Submit Unvailability
           </button>
+        </div>
         </div>
       ) : (
         <h1>You do not have permission to access this page</h1>

@@ -9,6 +9,7 @@ import { Manager } from './pages/Manager'
 import { MySchedule } from './components/MySchedule'
 import { DeskAvailability } from './pages/DeskAvailability'
 import { ManagerApproval } from './pages/ManagerApproval'
+import { ManagerList } from './pages/ManagerList'
 import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import React from 'react'
 import './App.css'
@@ -23,6 +24,7 @@ function App() {
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/availability" element={<UserAvailability/>}/>
           <Route path="/userlist" element={<UserList/>}/>
+          <Route path="/managerlist" element={<ManagerList/>}/>
           <Route path="/manager" element={<Manager/>}/>
           <Route path="/myschedule/:id" element={<Profile/>}/>
           <Route path="/da_availability" element={<DeskAvailability/>}/>

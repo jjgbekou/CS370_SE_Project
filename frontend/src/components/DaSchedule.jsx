@@ -45,7 +45,7 @@ const generateTimeSlots = () => {
           const person = schedule[day] && schedule[day][slot];
           return (
             <td key={`${day}-${slot}`} className={"border border-gray-200 px-4 py-2 " + (!person ? "cursor-pointer hover:bg-blue-500" : "")} onClick={() => handleApplyClick(day, slot, person)}>
-              {person && <div className={"bg-blue-100 rounded-lg p-2 text-black " + (person.userId == userId ? "cursor-pointer hover:bg-blue-500" : "")} onClick={() => handleGiveClick(day, slot, person)}>{person.name}</div>}
+              {person && <div className={"bg-blue-100 rounded-lg p-2 text-black " + (person.userId == userId ? "cursor-pointer bg-blue-500 hover:bg-blue-400" : "")} onClick={() => handleGiveClick(day, slot, person)}>{person.name}</div>}
             </td>
           );
         })}
@@ -105,7 +105,7 @@ const generateTimeSlots = () => {
           <tr className="bg-gray-100">
             <th className="border border-gray-200 px-4 py-2 bg-truman-blue">Time Slot</th>
             {generateDates().map((day, index) => (
-              <th key={index} className="border border-gray-200 px-4 py-2 bg-truman-blue">{day}</th>
+              <th key={index} className="border border-gray-200 px-4 py-2 text-2xl bg-truman-blue">{day}</th>
             ))}
           </tr>
         </thead>
