@@ -19,3 +19,5 @@ python manage.py runserver\
 
 **IMPORTANT**
 For security reasons, the Mongo database is locked by IP address. If you need to use the database, for testing purposes or whatever else, please email add2814@truman.edu with your IP address and we will add you.
+
+LINK TO DOCUMENTATION: https://docs.google.com/document/d/1yf-q9YYwfRJXh8oFpf5xbbGg-pe8qv_AH4cWJoJSDgI/edit
